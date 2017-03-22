@@ -32,3 +32,5 @@ node_modules
 
 # JetBrains IDEs (AppCode / PyCharm / WebStorm)
 .idea
+
+ProjectApp/third_party/*
