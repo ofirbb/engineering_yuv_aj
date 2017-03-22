@@ -7,11 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
-
-#ifdef __cplusplus
-#import <opencv2/opencv.hpp>
-#endif
-
+#include "opencv2/core/core.hpp"
 
 @interface UIImage (OpenCV)
 

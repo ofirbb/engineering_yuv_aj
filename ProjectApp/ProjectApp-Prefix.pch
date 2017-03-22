@@ -15,4 +15,40 @@
 
 #endif
 
+// libc++.
+
+#ifdef __cplusplus
+
+#import <algorithm>
+
+#import <array>
+
+#import <cmath>
+
+#import <list>
+
+#import <map>
+
+#import <memory>
+
+#import <numeric>
+
+#import <set>
+
+#import <string>
+
+#import <unordered_map>
+
+#import <vector>
+
+#endif
+
+
+
+// Apple's Frameworks.
+
+#import <Foundation/Foundation.h>
+#import <UIKit/UIKit.h>
+
+
 #endif /* ProjectApp_Prefix_pch */

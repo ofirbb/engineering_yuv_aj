@@ -10,9 +10,6 @@
 #import "UIImage+OpenCV.h"
 
 
-
-using namespace cv;
-
 @implementation UIImage (OpenCV)
 
 + (UIImage *)imageFromCVMat:(cv::Mat)cvMat {
@@ -81,7 +78,7 @@ using namespace cv;
     int cols = self.size.width;
     int rows = self.size.height;
     
-    Mat gray(rows, cols, CV_8UC1);
+    cv::Mat gray(rows, cols, CV_8UC1);
     
     NSLog(@"cols %d rows %d step %zu", cols, rows, gray.step[0]);
     CGContextRef contextRef = CGBitmapContextCreate(gray.data,                 // Pointer to data

@@ -1,7 +1,7 @@
 #import <UIKit/UIKit.h>
 #import <Foundation/Foundation.h>
 
-@interface UiGuidance : NSObject
+@interface UIGuidance : NSObject
 {
     - (NSArray)getImagePose:()image;
     - (void)getImagePose:(UIImage *)image;
