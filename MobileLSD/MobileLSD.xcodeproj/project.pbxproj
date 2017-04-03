@@ -1210,6 +1210,7 @@
 		6C4475931DE7A1E400316B64 = {
 			isa = PBXGroup;
 			children = (
+				AB364AB91E92467900030132 /* New Group */,
 				6C3721C61DE9564100ADC776 /* opencv2.framework */,
 				6C3721C81DE9579F00ADC776 /* libjpeg.a */,
 				6C3720381DE94FD400ADC776 /* Eigen */,
@@ -1281,6 +1282,13 @@
 				6C4475C61DE7A1E400316B64 /* Info.plist */,
 			);
 			path = MobileLSDUITests;
+			sourceTree = "<group>";
+		};
+		AB364AB91E92467900030132 /* New Group */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = "New Group";
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
