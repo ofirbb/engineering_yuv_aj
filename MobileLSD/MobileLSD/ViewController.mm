@@ -13,7 +13,7 @@
 #include "opencv2/opencv.hpp"
 #include <iostream>
 #include "SlamSystem.h"
-
+#include "LightfieldClass.h"
 
 
 @interface ViewController (){
@@ -23,6 +23,8 @@
     UITextView *translation_; // Display the current FPS
     int64 curr_time_; // Store the current time
     lsd_slam::SlamSystem* system_;
+    //AJB-added
+    LightfieldClass* lightfield_;
 	float max_fps_;
 	float avg_fps_;
     int cam_width;
@@ -113,6 +115,7 @@ void getK(Sophus::Matrix3f& K){
     Sophus::Matrix3f K;
 	getK(K);
     system_ = new lsd_slam::SlamSystem(cam_width, cam_height, K);
+    lightfield_ = new LightfieldClass();
     count_ = 0;
     displayImage = cv::Mat(cam_height, cam_width*2, CV_8UC3);
     depthMap = cv::Mat(cam_height, cam_width, CV_8UC3);
@@ -188,8 +191,37 @@ void getK(Sophus::Matrix3f& K){
 	system_->displayDepImageMutex.unlock();
 	auto sim3mat = system_->getSim3Mat();
 	auto transmat = sim3mat.translation();
-	
-
+    auto rotmat = sim3mat.rxso3().rotationMatrix();
+    
+    lightfieldStructUnit newUnit;
+    //newUnit.position = cameraCenterAndCorners[0];
+//    
+//    Matx34d tempPose;
+//    tempPose = Matx34d(rotmat(0, 0), rotmat(0, 1), rotmat(0, 2), transmat(0),
+//                        rotmat(1, 0), rotmat(1, 1), rotmat(1, 2), transmat(1),
+//                        rotmat(2, 0), rotmat(2, 1), rotmat(2, 2), transmat(2));
+//    newUnit.pose = tempPose;
+//    newUnit.image = image;
+//    lightfield_->imagesAndPoses.push_back(newUnit);
+//    
+    system_->addNewDataMutex.lock();
+    if (lightfield_->numImages == lightfield_->maxNumImages) {
+        //TODO- send to rendering section
+        
+    }
+    unsigned char *input = (unsigned char *)(image.data);
+    //int de = image.channels();
+    memcpy(lightfield_->ImgDataSeq + 3 * image.cols * image.rows + lightfield_->numImages,
+           input, 3 * image.cols * image.rows);
+    
+    Matx34d tempPose = Matx34d(rotmat(0, 0), rotmat(0, 1), rotmat(0, 2), transmat(0),
+                       rotmat(1, 0), rotmat(1, 1), rotmat(1, 2), transmat(1),
+                       rotmat(2, 0), rotmat(2, 1), rotmat(2, 2), transmat(2));
+    
+    lightfield_->AllCameraMat.push_back(tempPose);
+    ++(lightfield_->numImages);
+    system_->addNewDataMutex.unlock();
+    
     cv::cvtColor(image, colorImage, CV_GRAY2RGB);
     colorImage.copyTo(displayImage(cv::Rect(0, 0, cam_width, cam_height)));
     depthMap.copyTo(displayImage(cv::Rect(cam_width, 0, cam_width, cam_height)));

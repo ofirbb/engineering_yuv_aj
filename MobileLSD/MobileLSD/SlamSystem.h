@@ -110,6 +110,7 @@ public:
 	std::queue<cv::Mat> displayMatQueue;
 	cv::Mat displayDepImage;
 	boost::mutex displayDepImageMutex;
+    boost::mutex addNewDataMutex;
 
 	float msTrackFrame, msOptimizationIteration, msFindConstraintsItaration, msFindReferences;
 	int nTrackFrame, nOptimizationIteration, nFindConstraintsItaration, nFindReferences;

@@ -12,7 +12,6 @@
 		112222011DEA623400626398 /* CoreMedia.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 112222001DEA623400626398 /* CoreMedia.framework */; };
 		112222031DEA623A00626398 /* AssetsLibrary.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 112222021DEA623A00626398 /* AssetsLibrary.framework */; };
 		112222051DEA624200626398 /* CoreVideo.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 112222041DEA624200626398 /* CoreVideo.framework */; };
-		112222071DEA624A00626398 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 112222061DEA624A00626398 /* QuartzCore.framework */; };
 		6C371EB41DE94EA000ADC776 /* Frame.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6C371E941DE94EA000ADC776 /* Frame.cpp */; };
 		6C371EB51DE94EA000ADC776 /* FrameMemory.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6C371E961DE94EA000ADC776 /* FrameMemory.cpp */; };
 		6C371EB61DE94EA000ADC776 /* FramePoseStruct.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6C371E981DE94EA000ADC776 /* FramePoseStruct.cpp */; };
@@ -68,6 +67,9 @@
 		6C4475BA1DE7A1E400316B64 /* MobileLSDTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C4475B91DE7A1E400316B64 /* MobileLSDTests.m */; };
 		6C4475C51DE7A1E400316B64 /* MobileLSDUITests.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C4475C41DE7A1E400316B64 /* MobileLSDUITests.m */; };
 		6C4475D51DE7CED200316B64 /* libboost.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 6C4475D41DE7CED200316B64 /* libboost.a */; };
+		AB364AC81E925EC100030132 /* findImageFromPose.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AB364AC01E925EC100030132 /* findImageFromPose.cpp */; };
+		AB364ACA1E925EC100030132 /* LightfieldClass.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AB364AC21E925EC100030132 /* LightfieldClass.cpp */; };
+		AB364ACC1E925EC100030132 /* ReadInDataSet.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AB364AC51E925EC100030132 /* ReadInDataSet.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -453,6 +455,13 @@
 		6C4475C41DE7A1E400316B64 /* MobileLSDUITests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MobileLSDUITests.m; sourceTree = "<group>"; };
 		6C4475C61DE7A1E400316B64 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		6C4475D41DE7CED200316B64 /* libboost.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libboost.a; path = boost/ios/libboost.a; sourceTree = "<group>"; };
+		AB364AC01E925EC100030132 /* findImageFromPose.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = findImageFromPose.cpp; path = LumiRendering/findImageFromPose.cpp; sourceTree = "<group>"; };
+		AB364AC21E925EC100030132 /* LightfieldClass.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = LightfieldClass.cpp; path = LumiRendering/LightfieldClass.cpp; sourceTree = "<group>"; };
+		AB364AC31E925EC100030132 /* LightfieldClass.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = LightfieldClass.h; path = LumiRendering/LightfieldClass.h; sourceTree = "<group>"; };
+		AB364AC51E925EC100030132 /* ReadInDataSet.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = ReadInDataSet.cpp; path = LumiRendering/ReadInDataSet.cpp; sourceTree = "<group>"; };
+		AB364AC71E925EC100030132 /* Xform.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Xform.h; path = LumiRendering/Xform.h; sourceTree = "<group>"; };
+		AB364ACD1E92628500030132 /* OpenGLES.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGLES.framework; path = "../../Documents/iOS-Runtime-Headers-master/Frameworks/OpenGLES.framework"; sourceTree = "<group>"; };
+		AB364ACF1E92629F00030132 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = "../../Documents/iOS-Runtime-Headers-master/Frameworks/QuartzCore.framework"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -460,13 +469,12 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				112222071DEA624A00626398 /* QuartzCore.framework in Frameworks */,
+				6C3721C71DE9564100ADC776 /* opencv2.framework in Frameworks */,
 				112222051DEA624200626398 /* CoreVideo.framework in Frameworks */,
 				112222031DEA623A00626398 /* AssetsLibrary.framework in Frameworks */,
 				112222011DEA623400626398 /* CoreMedia.framework in Frameworks */,
 				112221FF1DEA622C00626398 /* AVFoundation.framework in Frameworks */,
 				6C3721C91DE9579F00ADC776 /* libjpeg.a in Frameworks */,
-				6C3721C71DE9564100ADC776 /* opencv2.framework in Frameworks */,
 				6C4475D51DE7CED200316B64 /* libboost.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -491,6 +499,8 @@
 		112221FD1DEA622C00626398 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				AB364ACF1E92629F00030132 /* QuartzCore.framework */,
+				AB364ACD1E92628500030132 /* OpenGLES.framework */,
 				112222061DEA624A00626398 /* QuartzCore.framework */,
 				112222041DEA624200626398 /* CoreVideo.framework */,
 				112222021DEA623A00626398 /* AssetsLibrary.framework */,
@@ -1210,13 +1220,13 @@
 		6C4475931DE7A1E400316B64 = {
 			isa = PBXGroup;
 			children = (
-				AB364AB91E92467900030132 /* New Group */,
 				6C3721C61DE9564100ADC776 /* opencv2.framework */,
 				6C3721C81DE9579F00ADC776 /* libjpeg.a */,
 				6C3720381DE94FD400ADC776 /* Eigen */,
 				6C3721AC1DE9503700ADC776 /* sophus */,
 				6C371E931DE94EA000ADC776 /* DataStructures */,
 				6C371E9A1DE94EA000ADC776 /* DepthEstimation */,
+				AB364ABF1E925E9500030132 /* LumiRendering */,
 				6C371E9F1DE94EA000ADC776 /* Tracking */,
 				6C371EA91DE94EA000ADC776 /* util */,
 				6C4475D41DE7CED200316B64 /* libboost.a */,
@@ -1284,11 +1294,16 @@
 			path = MobileLSDUITests;
 			sourceTree = "<group>";
 		};
-		AB364AB91E92467900030132 /* New Group */ = {
+		AB364ABF1E925E9500030132 /* LumiRendering */ = {
 			isa = PBXGroup;
 			children = (
+				AB364AC01E925EC100030132 /* findImageFromPose.cpp */,
+				AB364AC21E925EC100030132 /* LightfieldClass.cpp */,
+				AB364AC31E925EC100030132 /* LightfieldClass.h */,
+				AB364AC51E925EC100030132 /* ReadInDataSet.cpp */,
+				AB364AC71E925EC100030132 /* Xform.h */,
 			);
-			name = "New Group";
+			name = LumiRendering;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -1459,7 +1474,10 @@
 				6C371EBE1DE94EA000ADC776 /* settings.cpp in Sources */,
 				6C371EB91DE94EA000ADC776 /* Relocalizer.cpp in Sources */,
 				6C4475A41DE7A1E400316B64 /* AppDelegate.m in Sources */,
+				AB364ACA1E925EC100030132 /* LightfieldClass.cpp in Sources */,
 				6C371EB41DE94EA000ADC776 /* Frame.cpp in Sources */,
+				AB364AC81E925EC100030132 /* findImageFromPose.cpp in Sources */,
+				AB364ACC1E925EC100030132 /* ReadInDataSet.cpp in Sources */,
 				6C371EBA1DE94EA000ADC776 /* SE3Tracker.cpp in Sources */,
 				6C371EBD1DE94EA000ADC776 /* globalFuncs.cpp in Sources */,
 				6C371EBB1DE94EA000ADC776 /* Sim3Tracker.cpp in Sources */,
@@ -1635,7 +1653,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = ajbruce;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				TARGETED_DEVICE_FAMILY = 1;
+				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Debug;
 		};
@@ -1666,7 +1684,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = ajbruce;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				TARGETED_DEVICE_FAMILY = 1;
+				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Release;
 		};
