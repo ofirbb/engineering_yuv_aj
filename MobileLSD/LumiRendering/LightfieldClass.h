@@ -8,6 +8,7 @@
 #include "opencv2/features2d/features2d.hpp"
 #include "opencv2/highgui/highgui.hpp"
 #include <opencv2/calib3d/calib3d.hpp>
+//#opencv2/imgcodecs/ios.h
 //#include "opencv2/nonfree/features2d.hpp"
 #include <opencv2/core/core.hpp>
 #include <opencv2/imgproc/imgproc.hpp>
@@ -65,6 +66,8 @@ public:
 	//vector <Mat *> samplingPath;
 	//vector <Mat> homographiesOfFrameImages;
 	
+    Mat currImage;
+    
 	unsigned char*ImgDataSeq;
 	vector<pair<int, double>> CurrFrameWeights;
 	vector<Point3d> proxyData;

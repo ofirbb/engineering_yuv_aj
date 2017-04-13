@@ -425,8 +425,5 @@ Mat LightfieldClass::DrawImage(xform xf)
 
 	return myImg;
 
-
-
-
-
 }
+

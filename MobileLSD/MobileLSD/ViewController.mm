@@ -6,7 +6,6 @@
 //  Copyright © 2016 Guanhang Wu. All rights reserved.
 //
 
-#import "ViewController.h"
 #include <boost/thread.hpp>
 #include "util/settings.h"
 #include "util/globalFuncs.h"
@@ -14,7 +13,8 @@
 #include <iostream>
 #include "SlamSystem.h"
 #include "LightfieldClass.h"
-
+#import "ViewController.h"
+#import "RenderViewController.h"
 
 @interface ViewController (){
     UIImageView *imageView_; // Setup the image view
@@ -116,6 +116,8 @@ void getK(Sophus::Matrix3f& K){
 	getK(K);
     system_ = new lsd_slam::SlamSystem(cam_width, cam_height, K);
     lightfield_ = new LightfieldClass();
+    
+    
     count_ = 0;
     displayImage = cv::Mat(cam_height, cam_width*2, CV_8UC3);
     depthMap = cv::Mat(cam_height, cam_width, CV_8UC3);
@@ -194,21 +196,15 @@ void getK(Sophus::Matrix3f& K){
     auto rotmat = sim3mat.rxso3().rotationMatrix();
     
     lightfieldStructUnit newUnit;
-    //newUnit.position = cameraCenterAndCorners[0];
-//    
-//    Matx34d tempPose;
-//    tempPose = Matx34d(rotmat(0, 0), rotmat(0, 1), rotmat(0, 2), transmat(0),
-//                        rotmat(1, 0), rotmat(1, 1), rotmat(1, 2), transmat(1),
-//                        rotmat(2, 0), rotmat(2, 1), rotmat(2, 2), transmat(2));
-//    newUnit.pose = tempPose;
-//    newUnit.image = image;
-//    lightfield_->imagesAndPoses.push_back(newUnit);
-//    
+
     system_->addNewDataMutex.lock();
     if (lightfield_->numImages == lightfield_->maxNumImages) {
         //TODO- send to rendering section
         
     }
+    
+    lightfield_->setCurrImage(image);
+    
     unsigned char *input = (unsigned char *)(image.data);
     //int de = image.channels();
     memcpy(lightfield_->ImgDataSeq + 3 * image.cols * image.rows + lightfield_->numImages,
@@ -259,5 +255,14 @@ void getK(Sophus::Matrix3f& K){
         translation_.text = fps_NSStr;
     });
 }
+
+-(void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender{
+    if([segue.identifier isEqualToString:@"moveToRenderSegue"]){
+        RenderViewController *controller = (RenderViewController*)segue.destinationViewController;
+        controller.lightfield_= lightfield_;
+    }
+}
+
+
 
 @end

@@ -20,7 +20,7 @@ using namespace cv;
 
 @interface ViewController : UIViewController<CvVideoCameraDelegate>
 {
- 
+    
     CvVideoCamera *videoCamers;
 }
 
