@@ -12,7 +12,7 @@
 
 @interface RenderViewController : UIViewController
 
-@property(nonatomic) LightfieldClass *lightfield_;
+@property (nonatomic) LightfieldClass *lightfield_;
 
 @property (weak, nonatomic) IBOutlet UIView *testView;
 

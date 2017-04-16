@@ -61,13 +61,13 @@
 		6C4475A11DE7A1E400316B64 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C4475A01DE7A1E400316B64 /* main.m */; };
 		6C4475A41DE7A1E400316B64 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C4475A31DE7A1E400316B64 /* AppDelegate.m */; };
 		6C4475A71DE7A1E400316B64 /* ViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 6C4475A61DE7A1E400316B64 /* ViewController.mm */; };
-		6C4475AA1DE7A1E400316B64 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 6C4475A81DE7A1E400316B64 /* Main.storyboard */; };
 		6C4475AC1DE7A1E400316B64 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 6C4475AB1DE7A1E400316B64 /* Assets.xcassets */; };
 		6C4475AF1DE7A1E400316B64 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 6C4475AD1DE7A1E400316B64 /* LaunchScreen.storyboard */; };
 		6C4475BA1DE7A1E400316B64 /* MobileLSDTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C4475B91DE7A1E400316B64 /* MobileLSDTests.m */; };
 		6C4475C51DE7A1E400316B64 /* MobileLSDUITests.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C4475C41DE7A1E400316B64 /* MobileLSDUITests.m */; };
 		6C4475D51DE7CED200316B64 /* libboost.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 6C4475D41DE7CED200316B64 /* libboost.a */; };
 		AB0DBBE91E9E865D00E80EC4 /* RenderViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = AB0DBBE81E9E865D00E80EC4 /* RenderViewController.mm */; };
+		AB0DBBED1EA2FC5900E80EC4 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = AB0DBBEB1EA2FC5900E80EC4 /* Main.storyboard */; };
 		AB364AC81E925EC100030132 /* findImageFromPose.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AB364AC01E925EC100030132 /* findImageFromPose.cpp */; };
 		AB364ACA1E925EC100030132 /* LightfieldClass.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AB364AC21E925EC100030132 /* LightfieldClass.cpp */; };
 		AB364ACC1E925EC100030132 /* ReadInDataSet.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AB364AC51E925EC100030132 /* ReadInDataSet.cpp */; };
@@ -445,7 +445,6 @@
 		6C4475A31DE7A1E400316B64 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
 		6C4475A51DE7A1E400316B64 /* ViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ViewController.h; sourceTree = "<group>"; };
 		6C4475A61DE7A1E400316B64 /* ViewController.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = ViewController.mm; sourceTree = "<group>"; };
-		6C4475A91DE7A1E400316B64 /* Base */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.objcpp; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		6C4475AB1DE7A1E400316B64 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		6C4475AE1DE7A1E400316B64 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		6C4475B01DE7A1E400316B64 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -458,7 +457,7 @@
 		6C4475D41DE7CED200316B64 /* libboost.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libboost.a; path = boost/ios/libboost.a; sourceTree = "<group>"; };
 		AB0DBBE71E9E864900E80EC4 /* RenderViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RenderViewController.h; sourceTree = "<group>"; };
 		AB0DBBE81E9E865D00E80EC4 /* RenderViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = RenderViewController.mm; sourceTree = "<group>"; };
-		AB0DBBEA1E9EA10C00E80EC4 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = en; path = en.lproj/Main.storyboard; sourceTree = "<group>"; };
+		AB0DBBEC1EA2FC5900E80EC4 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = "../../MobileLSD 2/MobileLSD/Base.lproj/Main.storyboard"; sourceTree = "<group>"; };
 		AB364AC01E925EC100030132 /* findImageFromPose.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = findImageFromPose.cpp; path = LumiRendering/findImageFromPose.cpp; sourceTree = "<group>"; };
 		AB364AC21E925EC100030132 /* LightfieldClass.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = LightfieldClass.cpp; path = LumiRendering/LightfieldClass.cpp; sourceTree = "<group>"; };
 		AB364AC31E925EC100030132 /* LightfieldClass.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = LightfieldClass.h; path = LumiRendering/LightfieldClass.h; sourceTree = "<group>"; };
@@ -1265,8 +1264,8 @@
 				AB0DBBE81E9E865D00E80EC4 /* RenderViewController.mm */,
 				AB0DBBE71E9E864900E80EC4 /* RenderViewController.h */,
 				1118C8101DF7AB4100D98BCC /* scalebar.png */,
-				6C4475A81DE7A1E400316B64 /* Main.storyboard */,
 				6C4475AB1DE7A1E400316B64 /* Assets.xcassets */,
+				AB0DBBEB1EA2FC5900E80EC4 /* Main.storyboard */,
 				6C4475AD1DE7A1E400316B64 /* LaunchScreen.storyboard */,
 				6C4475B01DE7A1E400316B64 /* Info.plist */,
 				6C44759F1DE7A1E400316B64 /* Supporting Files */,
@@ -1440,6 +1439,7 @@
 				6C3721941DE94FD400ADC776 /* Eigenvalues in Resources */,
 				6C3721971DE94FD400ADC776 /* IterativeLinearSolvers in Resources */,
 				6C37219C1DE94FD400ADC776 /* PardisoSupport in Resources */,
+				AB0DBBED1EA2FC5900E80EC4 /* Main.storyboard in Resources */,
 				6C37218E1DE94FD400ADC776 /* Cholesky in Resources */,
 				6C3721951DE94FD400ADC776 /* Geometry in Resources */,
 				6C3721991DE94FD400ADC776 /* LU in Resources */,
@@ -1449,7 +1449,6 @@
 				6C3721931DE94FD400ADC776 /* Eigen in Resources */,
 				6C3721911DE94FD400ADC776 /* Core in Resources */,
 				6C3721981DE94FD400ADC776 /* Jacobi in Resources */,
-				6C4475AA1DE7A1E400316B64 /* Main.storyboard in Resources */,
 				6C3721A41DE94FD400ADC776 /* SparseQR in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1531,21 +1530,20 @@
 /* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
-		6C4475A81DE7A1E400316B64 /* Main.storyboard */ = {
-			isa = PBXVariantGroup;
-			children = (
-				6C4475A91DE7A1E400316B64 /* Base */,
-				AB0DBBEA1E9EA10C00E80EC4 /* en */,
-			);
-			name = Main.storyboard;
-			sourceTree = "<group>";
-		};
 		6C4475AD1DE7A1E400316B64 /* LaunchScreen.storyboard */ = {
 			isa = PBXVariantGroup;
 			children = (
 				6C4475AE1DE7A1E400316B64 /* Base */,
 			);
 			name = LaunchScreen.storyboard;
+			sourceTree = "<group>";
+		};
+		AB0DBBEB1EA2FC5900E80EC4 /* Main.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				AB0DBBEC1EA2FC5900E80EC4 /* Base */,
+			);
+			name = Main.storyboard;
 			sourceTree = "<group>";
 		};
 /* End PBXVariantGroup section */

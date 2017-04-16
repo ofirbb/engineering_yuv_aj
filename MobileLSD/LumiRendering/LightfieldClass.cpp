@@ -162,7 +162,7 @@ vector<pair<int, double>> LightfieldClass::GetWeights(Point3d proxyPoint, Point3
 		{
 			cout << e.msg << endl;
 		}
-		int test = 1;
+		//int test = 1;
 		if (curimgPoint[0].x > IMAGE_RESOLUTION_X || curimgPoint[0].y > IMAGE_RESOLUTION_Y)
 			curpenalities[2] = DBL_MAX_EXP;
 		else

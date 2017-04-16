@@ -24,8 +24,6 @@ using namespace cv;
     CvVideoCamera *videoCamers;
 }
 
-
-
 @property (nonatomic, retain) CvVideoCamera *videoCamera;
 
 

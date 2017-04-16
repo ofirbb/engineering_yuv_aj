@@ -6,15 +6,18 @@
 //  Copyright © 2016 Guanhang Wu. All rights reserved.
 //
 
+
+#import "ViewController.h"
+#import "RenderViewController.h"
+
 #include <boost/thread.hpp>
 #include "util/settings.h"
 #include "util/globalFuncs.h"
 #include "opencv2/opencv.hpp"
 #include <iostream>
+
 #include "SlamSystem.h"
 #include "LightfieldClass.h"
-#import "ViewController.h"
-#import "RenderViewController.h"
 
 @interface ViewController (){
     UIImageView *imageView_; // Setup the image view
@@ -35,6 +38,7 @@
     cv::Mat displayImage;
     cv::Mat colorImage;
     UIButton *resetButton_;
+    UIButton *renderButton_;
 	int skip_frame_; //buffer size for the camera to start
 }
 @end
@@ -111,6 +115,10 @@ void getK(Sophus::Matrix3f& K){
     [resetButton_ addTarget:self action:@selector(restartWasPressed) forControlEvents:UIControlEventTouchUpInside];
 
     
+    renderButton_ = [self simpleButton:@"Render" buttonColor:[UIColor blackColor]];
+    // Important part that connects the action to the member function buttonWasPressed
+    [renderButton_ addTarget:self action:@selector(renderWasPressed) forControlEvents:UIControlEventTouchUpInside];
+
     runningIdx_ = 0;
     Sophus::Matrix3f K;
 	getK(K);
@@ -128,7 +136,7 @@ void getK(Sophus::Matrix3f& K){
     
     UIView *scaleView = [[UIView alloc] initWithFrame:CGRectMake(self.view.frame.size.width - 320 , 20, 300, 50)];
     
-    scaleView.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"scalebar.png"]];
+    //scaleView.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"scalebar.png"]];
     
     [self.view addSubview:scaleView];
 	curr_time_ = cv::getTickCount();
@@ -139,7 +147,6 @@ void getK(Sophus::Matrix3f& K){
 
 }
 
-
 - (void)restartWasPressed {
     //[videoCamera stop];
     count_ = 0;
@@ -147,6 +154,10 @@ void getK(Sophus::Matrix3f& K){
     //[videoCamera start];
 }
 
+- (void)renderWasPressed {
+    [self performSegueWithIdentifier:@"moveToRenderSegue" sender:self];
+    
+}
 
 
 - (void)didReceiveMemoryWarning {
@@ -161,7 +172,17 @@ void getK(Sophus::Matrix3f& K){
     int button_width = 200; int button_height = 50; // Set the button height and width (heuristic)
     // Botton position is adaptive as this could run on a different device (iPAD, iPhone, etc.)
     int button_x = (self.view.frame.size.width - button_width)/2; // Position of top-left of button
-    int button_y = self.view.frame.size.height - 80; // Position of top-left of button
+    int button_y;
+    
+    if ([buttonName isEqualToString:@"Reset"]) {
+        
+        button_y = self.view.frame.size.height - 80; // Position of top-left of button
+        
+    }
+    else {
+        button_y = self.view.frame.size.height;
+        
+    }
     button.frame = CGRectMake(button_x, button_y, button_width, button_height); // Position the button
     [button setTitle:buttonName forState:UIControlStateNormal]; // Set the title for the button
     [button setTitleColor:color forState:UIControlStateNormal]; // Set the color for the title
@@ -203,7 +224,7 @@ void getK(Sophus::Matrix3f& K){
         
     }
     
-    lightfield_->setCurrImage(image);
+    lightfield_->currImage = image;
     
     unsigned char *input = (unsigned char *)(image.data);
     //int de = image.channels();
@@ -258,8 +279,10 @@ void getK(Sophus::Matrix3f& K){
 
 -(void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender{
     if([segue.identifier isEqualToString:@"moveToRenderSegue"]){
-        RenderViewController *controller = (RenderViewController*)segue.destinationViewController;
+        RenderViewController *controller = [segue destinationViewController];
+        //(RenderViewController*)segue.destinationViewController;
         controller.lightfield_= lightfield_;
+        [self addChildViewController:controller];
     }
 }
 
