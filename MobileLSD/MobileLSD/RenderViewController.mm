@@ -21,8 +21,6 @@
 @interface RenderViewController ()
 
 
-
-
 -(void)moveViewWithGestureRecognizer:(UIPanGestureRecognizer *)panGestureRecognizer;
 
 -(void)handleSingleTapGesture:(UITapGestureRecognizer *)tapGestureRecognizer;
@@ -92,7 +90,6 @@
     UITapGestureRecognizer *singleTapGestureRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(handleSingleTapGesture:)];
     [self.testView addGestureRecognizer:singleTapGestureRecognizer];
     
-    
     UITapGestureRecognizer *doubleTapGestureRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(handleDoubleTapGesture:)];
     doubleTapGestureRecognizer.numberOfTapsRequired = 2;
     doubleTapGestureRecognizer.numberOfTouchesRequired = 2;
@@ -106,23 +103,11 @@
     // Dispose of any resources that can be recreated.
 }
 
-/*
- #pragma mark - Navigation
- 
- // In a storyboard-based application, you will often want to do a little preparation before navigation
- - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
- {
- // Get the new view controller using [segue destinationViewController].
- // Pass the selected object to the new view controller.
- }
- */
-
 
 -(void)moveViewWithGestureRecognizer:(UIPanGestureRecognizer *)panGestureRecognizer{
     CGPoint touchLocation = [panGestureRecognizer locationInView:self.view];
     
     self.testView.center = touchLocation;
-    
     
     CGPoint velocity = [panGestureRecognizer velocityInView:self.view];
     

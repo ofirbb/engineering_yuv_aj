@@ -80,7 +80,7 @@ void getK(Sophus::Matrix3f& K){
     self.videoCamera.delegate = self;
     self.videoCamera.defaultAVCaptureDevicePosition = AVCaptureDevicePositionBack;
     self.videoCamera.defaultAVCaptureVideoOrientation = AVCaptureVideoOrientationLandscapeRight;
-    self.videoCamera.defaultFPS = 60; // Set the frame rate
+    self.videoCamera.defaultFPS = 10; // Set the frame rate- AJB changed from 60 to 10
     self.videoCamera.grayscaleMode = YES; // Get grayscale
     self.videoCamera.rotateVideo = YES; // Rotate video so everything looks correct
     
@@ -94,14 +94,14 @@ void getK(Sophus::Matrix3f& K){
     [fpsView_ setBackgroundColor:[UIColor clearColor]]; // Set background color to be clear
     [fpsView_ setTextColor:[UIColor redColor]]; // Set text to be RED
     [fpsView_ setFont:[UIFont systemFontOfSize:18]]; // Set the Font size
-    [self.view addSubview:fpsView_];
+    //[self.view addSubview:fpsView_];
 
     avgfpsView_ = [[UITextView alloc] initWithFrame:CGRectMake(165,15,view_width,std::max(offset,35))];
     [avgfpsView_ setOpaque:false]; // Set to be Opaque
     [avgfpsView_ setBackgroundColor:[UIColor clearColor]]; // Set background color to be clear
     [avgfpsView_ setTextColor:[UIColor redColor]]; // Set text to be RED
     [avgfpsView_ setFont:[UIFont systemFontOfSize:18]]; // Set the Font size
-    [self.view addSubview:avgfpsView_];
+    //[self.view addSubview:avgfpsView_];
 
     translation_ = [[UITextView alloc] initWithFrame:CGRectMake(0,60,view_width,std::max(offset,35))];
     [translation_ setOpaque:false]; // Set to be Opaque
@@ -148,13 +148,14 @@ void getK(Sophus::Matrix3f& K){
 }
 
 - (void)restartWasPressed {
-    //[videoCamera stop];
+    [videoCamera stop];
     count_ = 0;
     runningIdx_ = 0;
-    //[videoCamera start];
+    [videoCamera start];
 }
 
 - (void)renderWasPressed {
+    [videoCamera stop];
     [self performSegueWithIdentifier:@"moveToRenderSegue" sender:self];
     
 }
@@ -169,18 +170,22 @@ void getK(Sophus::Matrix3f& K){
 {
     UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom]; // Initialize the button
     // Bit of a hack, but just positions the button at the bottom of the screen
-    int button_width = 200; int button_height = 50; // Set the button height and width (heuristic)
+    int button_width = 100; int button_height = 50; // Set the button height and width (heuristic)
     // Botton position is adaptive as this could run on a different device (iPAD, iPhone, etc.)
-    int button_x = (self.view.frame.size.width - button_width)/2; // Position of top-left of button
-    int button_y;
-    
+    int button_x; // Position of top-left of button
+    int button_y = self.view.frame.size.height - 80;
+    button.layer.borderWidth = 1.0f;
+    button.layer.borderColor = [[UIColor darkGrayColor] CGColor];
+    button.layer.cornerRadius = 10;
+    button.backgroundColor = [UIColor lightGrayColor];
     if ([buttonName isEqualToString:@"Reset"]) {
         
-        button_y = self.view.frame.size.height - 80; // Position of top-left of button
+         button_x = (self.view.frame.size.width - button_width)/4;
+        
         
     }
     else {
-        button_y = self.view.frame.size.height;
+        button_x = 3 * (self.view.frame.size.width - button_width)/4;
         
     }
     button.frame = CGRectMake(button_x, button_y, button_width, button_height); // Position the button
@@ -211,6 +216,7 @@ void getK(Sophus::Matrix3f& K){
 
 	system_->displayDepImageMutex.lock();	
 	depthMap = system_->displayDepImage;
+    //std::cout << "depth map: " <<depthMap << std:: endl;
 	system_->displayDepImageMutex.unlock();
 	auto sim3mat = system_->getSim3Mat();
 	auto transmat = sim3mat.translation();
@@ -225,10 +231,10 @@ void getK(Sophus::Matrix3f& K){
     }
     
     lightfield_->currImage = image;
-    
+
     unsigned char *input = (unsigned char *)(image.data);
     //int de = image.channels();
-    memcpy(lightfield_->ImgDataSeq + 3 * image.cols * image.rows + lightfield_->numImages,
+    std::memcpy(lightfield_->ImgDataSeq + 3 * image.cols * image.rows + lightfield_->numImages,
            input, 3 * image.cols * image.rows);
     
     Matx34d tempPose = Matx34d(rotmat(0, 0), rotmat(0, 1), rotmat(0, 2), transmat(0),
@@ -282,7 +288,6 @@ void getK(Sophus::Matrix3f& K){
         RenderViewController *controller = [segue destinationViewController];
         //(RenderViewController*)segue.destinationViewController;
         controller.lightfield_= lightfield_;
-        [self addChildViewController:controller];
     }
 }
 

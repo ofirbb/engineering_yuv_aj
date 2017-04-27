@@ -31,13 +31,7 @@ LightfieldClass::LightfieldClass(void) : ImgDataSeq(NULL)
 
     this->ImgDataSeq = (unsigned char*)malloc(sizeof(unsigned char) * IMAGE_RESOLUTION_X * IMAGE_RESOLUTION_Y * maxNumImages * 3);
     
-//    fullPathData = "allImages_data";
-//    
-//    FILE *lfdatafile1 = fopen(fullPathData.c_str(),"w"); //delete existing file
-//    fclose(lfdatafile1);
-//    FILE *lfdatafile = fopen(fullPathData.c_str(),"ab");
-//    
-    string filename = "";
+
 	this->kth = 1;
 
     getK(Camera_K);
@@ -56,14 +50,7 @@ LightfieldClass::LightfieldClass(void) : ImgDataSeq(NULL)
 //	fread(this->ImgDataSeq, IMAGE_RESOLUTION_X * IMAGE_RESOLUTION_Y * numImages * 3, 1, lfdatafile);
 //	fclose(lfdatafile);
 
-	string FullPathXML = filename + ".xml";
-	//FileStorage fs(FullPathXML,FileStorage::READ);
-	vector<string> imagelists;
-	if (!readStringList(FullPathXML, imagelists))
-	{
-		cout << "Can't locate the file!" << endl;
 
-	}
 
 //    //Set Camera Matrix for each image
 //	FileStorage fs1(cameraMat, FileStorage::READ);
