@@ -14,6 +14,8 @@
 
 @property (nonatomic) LightfieldClass *lightfield_;
 
+@property (nonatomic, retain) IBOutlet UIImageView* renderedImageView;
+
 @property (weak, nonatomic) IBOutlet UIView *testView;
 
 @property (weak, nonatomic) IBOutlet UILabel *horizontalVelocityLabel;

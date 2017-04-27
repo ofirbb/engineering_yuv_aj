@@ -170,7 +170,7 @@ void getK(Sophus::Matrix3f& K){
 {
     UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom]; // Initialize the button
     // Bit of a hack, but just positions the button at the bottom of the screen
-    int button_width = 100; int button_height = 50; // Set the button height and width (heuristic)
+    int button_width = 100; int button_height = 40; // Set the button height and width (heuristic)
     // Botton position is adaptive as this could run on a different device (iPAD, iPhone, etc.)
     int button_x; // Position of top-left of button
     int button_y = self.view.frame.size.height - 80;
@@ -181,7 +181,6 @@ void getK(Sophus::Matrix3f& K){
     if ([buttonName isEqualToString:@"Reset"]) {
         
          button_x = (self.view.frame.size.width - button_width)/4;
-        
         
     }
     else {

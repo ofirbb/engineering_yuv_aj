@@ -34,6 +34,7 @@
 @implementation RenderViewController
 
 @synthesize lightfield_;
+@synthesize renderedImageView;
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
@@ -76,14 +77,21 @@
 {
     [super viewDidLoad];
     
-    //self.lightfield_ = self.parentViewController.lightfield_;
-    
     // Do any additional setup after loading the view.
     
-    UIImage * imageShown = [self UIImageFromCVMat:lightfield_->currImage];
+    int x = 0;
+    int y = 0;
+    int height = self.view.frame.size.height;
+    int width = self.view.frame.size.width;
     
-    self.view.backgroundColor = [UIColor colorWithPatternImage:imageShown];
-
+    renderedImageView = [[UIImageView alloc] initWithFrame:CGRectMake(x,y,height, width)];
+    
+    [self.view addSubview:renderedImageView];
+    UIImage * imageShown = [self UIImageFromCVMat:lightfield_->currImage];
+   
+    renderedImageView.image = imageShown;
+    
+    
     UIPanGestureRecognizer *panGestureRecognizer = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(moveViewWithGestureRecognizer:)];
     [self.testView addGestureRecognizer:panGestureRecognizer];
     
