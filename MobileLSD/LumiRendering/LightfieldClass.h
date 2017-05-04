@@ -65,12 +65,9 @@ public:
 	int maxNumImages;
     int numImages;
 	vector<lightfieldStructUnit> imagesAndPoses;
-	//vector <Mat *> frameImages;
-	//vector <Mat *> samplingPath;
-	//vector <Mat> homographiesOfFrameImages;
 	
     Mat currImage;
-    
+    Matx34d currPose;
 	unsigned char*ImgDataSeq;
 	vector<pair<int, double>> CurrFrameWeights;
 	vector<Point3d> proxyData;

@@ -118,7 +118,7 @@ void getK(Sophus::Matrix3f& K){
     renderButton_ = [self simpleButton:@"Render" buttonColor:[UIColor blackColor]];
     // Important part that connects the action to the member function buttonWasPressed
     [renderButton_ addTarget:self action:@selector(renderWasPressed) forControlEvents:UIControlEventTouchUpInside];
-
+    
     runningIdx_ = 0;
     Sophus::Matrix3f K;
 	getK(K);
@@ -161,6 +161,7 @@ void getK(Sophus::Matrix3f& K){
 }
 
 
+
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
@@ -170,23 +171,29 @@ void getK(Sophus::Matrix3f& K){
 {
     UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom]; // Initialize the button
     // Bit of a hack, but just positions the button at the bottom of the screen
-    int button_width = 100; int button_height = 40; // Set the button height and width (heuristic)
+    int button_width = 100; int button_height = 30; // Set the button height and width (heuristic)
     // Botton position is adaptive as this could run on a different device (iPAD, iPhone, etc.)
     int button_x; // Position of top-left of button
-    int button_y = self.view.frame.size.height - 80;
-    button.layer.borderWidth = 1.0f;
-    button.layer.borderColor = [[UIColor darkGrayColor] CGColor];
-    button.layer.cornerRadius = 10;
-    button.backgroundColor = [UIColor lightGrayColor];
+    int button_y;
+    
     if ([buttonName isEqualToString:@"Reset"]) {
         
-         button_x = (self.view.frame.size.width - button_width)/4;
+        button_x = (self.view.frame.size.width - button_width)/4;
+        button_y = self.view.frame.size.height - 80;
         
     }
     else {
         button_x = 3 * (self.view.frame.size.width - button_width)/4;
+        button_y = self.view.frame.size.height - 80;
         
     }
+    
+    button.layer.borderWidth = 1.0f;
+    button.layer.borderColor = [[UIColor darkGrayColor] CGColor];
+    button.layer.cornerRadius = 10;
+    button.backgroundColor = [UIColor lightGrayColor];
+    
+    
     button.frame = CGRectMake(button_x, button_y, button_width, button_height); // Position the button
     [button setTitle:buttonName forState:UIControlStateNormal]; // Set the title for the button
     [button setTitleColor:color forState:UIControlStateNormal]; // Set the color for the title
@@ -229,8 +236,6 @@ void getK(Sophus::Matrix3f& K){
         
     }
     
-    lightfield_->currImage = image;
-
     unsigned char *input = (unsigned char *)(image.data);
     //int de = image.channels();
     std::memcpy(lightfield_->ImgDataSeq + 3 * image.cols * image.rows + lightfield_->numImages,
@@ -242,6 +247,9 @@ void getK(Sophus::Matrix3f& K){
     
     lightfield_->AllCameraMat.push_back(tempPose);
     ++(lightfield_->numImages);
+    
+    lightfield_->currImage = image;
+    lightfield_->currPose = tempPose;
     system_->addNewDataMutex.unlock();
     
     cv::cvtColor(image, colorImage, CV_GRAY2RGB);
