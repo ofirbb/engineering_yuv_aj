@@ -244,10 +244,7 @@ private:
 
 	bool updateKeyframe();
 
-
-	void debugDisplayDepthMap();
-
-
+    void debugDisplayDepthMap();
 
 	
 };
