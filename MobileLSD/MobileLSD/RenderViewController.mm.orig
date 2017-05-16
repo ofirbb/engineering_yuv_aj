@@ -14,7 +14,7 @@
 #include "util/globalFuncs.h"
 #include "opencv2/opencv.hpp"
 #include <iostream>
-#include "SlamSystem.h"
+#include "SlamSystem.h" //need?
 #include "LightfieldClass.h"
 #include "Xform.h"
 
@@ -49,21 +49,33 @@
     cv::Mat dst;
     warpAffine(cvMat, dst, rot_mat, cvMat.size());
     cvMat = dst;
-    
     NSData *data = [NSData dataWithBytes:cvMat.data length:cvMat.elemSize()*cvMat.total()];
+    
     CGColorSpaceRef colorSpace;
     CGBitmapInfo bitmapInfo;
+<<<<<<< HEAD
+    
+    if (cvMat.elemSize() == 1) {
+        colorSpace = CGColorSpaceCreateDeviceGray();
+        bitmapInfo = kCGImageAlphaNone | kCGBitmapByteOrderDefault;
+=======
     if (cvMat.elemSize() == 1) {
         colorSpace = CGColorSpaceCreateDeviceGray();
         bitmapInfo = kCGImageAlphaNone | kCGBitmapByteOrderDefault;
         
+>>>>>>> cd4e34f837af39fcaedbaece34b4c498298387d4
     } else {
         colorSpace = CGColorSpaceCreateDeviceRGB();
         bitmapInfo = kCGBitmapByteOrder32Little | (cvMat.elemSize() == 3? kCGImageAlphaNone : kCGImageAlphaNoneSkipFirst);
     }
     CGDataProviderRef provider = CGDataProviderCreateWithCFData((__bridge CFDataRef)data);
     // Creating CGImage from cv::Mat
+<<<<<<< HEAD
+    CGImageRef imageRef = CGImageCreate(
+                                        cvMat.cols,                 //width
+=======
     CGImageRef imageRef = CGImageCreate(cvMat.cols,                 //width
+>>>>>>> cd4e34f837af39fcaedbaece34b4c498298387d4
                                         cvMat.rows,                 //height
                                         8,                          //bits per component
                                         8 * cvMat.elemSize(),       //bits per pixel
@@ -75,6 +87,10 @@
                                         false,                      //should interpolate
                                         kCGRenderingIntentDefault   //intent
                                         );
+<<<<<<< HEAD
+    
+=======
+>>>>>>> cd4e34f837af39fcaedbaece34b4c498298387d4
     // Getting UIImage from CGImage
     UIImage *finalImage = [UIImage imageWithCGImage:imageRef];
     CGImageRelease(imageRef);
