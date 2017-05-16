@@ -42,35 +42,44 @@
 
 
 -(UIImage *)UIImageFromCVMat:(cv::Mat)cvMat
+
 {
     Point2f src_center(cvMat.cols/2.0F, cvMat.rows/2.0F);
     cv::Mat rot_mat = getRotationMatrix2D(src_center, 180, 1.0);
     cv::Mat dst;
     warpAffine(cvMat, dst, rot_mat, cvMat.size());
-    
     cvMat = dst;
     
     NSData *data = [NSData dataWithBytes:cvMat.data length:cvMat.elemSize()*cvMat.total()];
     CGColorSpaceRef colorSpace;
-    
+    CGBitmapInfo bitmapInfo;
     if (cvMat.elemSize() == 1) {
         colorSpace = CGColorSpaceCreateDeviceGray();
+        bitmapInfo = kCGImageAlphaNone | kCGBitmapByteOrderDefault;
+        
     } else {
         colorSpace = CGColorSpaceCreateDeviceRGB();
+        bitmapInfo = kCGBitmapByteOrder32Little | (cvMat.elemSize() == 3? kCGImageAlphaNone : kCGImageAlphaNoneSkipFirst);
     }
-    
     CGDataProviderRef provider = CGDataProviderCreateWithCFData((__bridge CFDataRef)data);
-    
     // Creating CGImage from cv::Mat
-    CGImageRef imageRef = CGImageCreate(cvMat.cols, cvMat.rows, 8, 8 * cvMat.elemSize(), cvMat.step[0], colorSpace, kCGImageAlphaNone|kCGBitmapByteOrderDefault, provider, NULL, false, kCGRenderingIntentDefault);
-    
-    
+    CGImageRef imageRef = CGImageCreate(cvMat.cols,                 //width
+                                        cvMat.rows,                 //height
+                                        8,                          //bits per component
+                                        8 * cvMat.elemSize(),       //bits per pixel
+                                        cvMat.step[0],              //bytesPerRow
+                                        colorSpace,                 //colorspace
+                                        bitmapInfo,                 // bitmap info
+                                        provider,                   //CGDataProviderRef
+                                        NULL,                       //decode
+                                        false,                      //should interpolate
+                                        kCGRenderingIntentDefault   //intent
+                                        );
     // Getting UIImage from CGImage
     UIImage *finalImage = [UIImage imageWithCGImage:imageRef];
     CGImageRelease(imageRef);
     CGDataProviderRelease(provider);
     CGColorSpaceRelease(colorSpace);
-    
     return finalImage;
 }
 
@@ -87,15 +96,15 @@
 
 
     UIPanGestureRecognizer *panGestureRecognizer = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(moveViewWithGestureRecognizer:)];
-    [self.renderedImageView addGestureRecognizer:panGestureRecognizer];
+    [self.view addGestureRecognizer:panGestureRecognizer];
     
-    UITapGestureRecognizer *singleTapGestureRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(handleSingleTapGesture:)];
-    [self.renderedImageView addGestureRecognizer:singleTapGestureRecognizer];
-    
-    UITapGestureRecognizer *doubleTapGestureRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(handleDoubleTapGesture:)];
-    doubleTapGestureRecognizer.numberOfTapsRequired = 2;
-    doubleTapGestureRecognizer.numberOfTouchesRequired = 2;
-    [self.renderedImageView addGestureRecognizer:doubleTapGestureRecognizer];
+//    UITapGestureRecognizer *singleTapGestureRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(handleSingleTapGesture:)];
+//    [self.view addGestureRecognizer:singleTapGestureRecognizer];
+//    
+//    UITapGestureRecognizer *doubleTapGestureRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(handleDoubleTapGesture:)];
+//    doubleTapGestureRecognizer.numberOfTapsRequired = 2;
+//    doubleTapGestureRecognizer.numberOfTouchesRequired = 2;
+//    [self.view addGestureRecognizer:doubleTapGestureRecognizer];
 
 }
 
@@ -112,7 +121,6 @@
     int height = self.view.frame.size.width;
     int width = self.view.frame.size.height;
     
-    
     self.renderedImageView = [[UIImageView alloc] initWithFrame:CGRectMake(0,0,height, width)];
     self.renderedImageView.image = image;
     [self.view addSubview:renderedImageView];
@@ -128,7 +136,7 @@
     // Botton position is adaptive as this could run on a different device (iPAD, iPhone, etc.)
     int button_x = (self.view.frame.size.width - button_width)/2;
 
-    int button_y = self.view.frame.size.height - 80;
+    int button_y = self.view.frame.size.height - 90;
     
     button.layer.borderWidth = 1.0f;
     button.layer.borderColor = [[UIColor darkGrayColor] CGColor];
@@ -152,6 +160,7 @@
 }
 
 -(void)moveViewWithGestureRecognizer:(UIPanGestureRecognizer *)panGestureRecognizer{
+   
     CGPoint startLocation;
     CGPoint stopLocation;
     if (panGestureRecognizer.state == UIGestureRecognizerStateBegan) {
@@ -162,21 +171,41 @@
         stopLocation = [panGestureRecognizer locationInView:self.view];
         
     }
-    CGFloat dx = stopLocation.x - startLocation.x;
-    CGFloat dy = stopLocation.y - startLocation.y;
-    CGFloat distance = sqrt(dx*dx + dy*dy );
-    NSLog(@"Distance: %f", distance);
+    double dx = (double) stopLocation.x - startLocation.x;
+    double dy = (double) stopLocation.y - startLocation.y;
+    bool planB = true;
     
     
-//    self.testView.center = touchLocation;
+    if(planB) {
+        
+        //    dx = dx/self.view.frame.size.height;
+        //    dy = dy/self.view.frame.size.width;
+        
+        int num = rand() % lightfield_->images.size();
+        std::cout << lightfield_->images.size() << std::endl;
+        std::cout << num << std::endl;
+        
+        lightfield_->currImage = lightfield_->images.at(num);
+        
+        [self updateRenderImage];
+        
+        
+    }
     
+    else {
     
-    //find new camera center, mult by GL_PROJECTION
-    
-    
-    //send xform xf to self->lightfield_.DrawImage
-    
-    
+    //need: Point3d vCameraLoc, Matx33d vP_rot, Vec3d vP_trans
+    Matx33d vP_rot = Matx33d(1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0);
+    Vec3d vP_trans = Vec3d(1.0, 1.0, 0.0);
+    Point3d vCameraLoc = Point3d();
+    int res = lightfield_->DrawImage(vCameraLoc, vP_rot, vP_trans);
+    if(res == SUCCESS) {
+        [self updateRenderImage];
+    }
+    else {
+        std::cout << "DrawImage did not succeed" << std::endl;
+    }
+    }
 }
 
 

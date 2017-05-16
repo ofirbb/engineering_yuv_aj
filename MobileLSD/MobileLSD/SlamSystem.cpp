@@ -331,36 +331,36 @@ bool SlamSystem::updateKeyframe()
 
 
 
-void SlamSystem::debugDisplayDepthMap()
-{
-
-	map->debugPlotDepthMap();
-	double scale = 1;
-	if(currentKeyFrame != 0 && currentKeyFrame != 0)
-		scale = currentKeyFrame->getScaledCamToWorld().scale();
-	// debug plot depthmap
-	char buf1[200];
-	char buf2[200];
-
-
-	snprintf(buf1,200,"Map: Upd %3.0fms (%2.0fHz); Trk %3.0fms (%2.0fHz); %d / %d / %d",
-			map->msUpdate, map->nAvgUpdate,
-			msTrackFrame, nAvgTrackFrame,
-			currentKeyFrame->numFramesTrackedOnThis, currentKeyFrame->numMappedOnThis, (int)unmappedTrackedFrames.size());
-
-
-	if(onSceenInfoDisplay);
-		//printMessageOnCVImage(map->debugImageDepth, buf1, buf2);
-
-	displayDepImageMutex.lock();
-	displayDepImage = map->debugImageDepth;
-	displayDepImageMutex.unlock();
-
-	//displayMatQueue.push(map->debugImageDepth);
-	if (displayDepthMap);
-		//Util::displayImage( "DebugWindow DEPTH", map->debugImageDepth, false );
-
-}
+//void SlamSystem::debugDisplayDepthMap()
+//{
+//
+//	map->debugPlotDepthMap();
+//	double scale = 1;
+//	if(currentKeyFrame != 0 && currentKeyFrame != 0)
+//		scale = currentKeyFrame->getScaledCamToWorld().scale();
+//	// debug plot depthmap
+//	char buf1[200];
+//	char buf2[200];
+//
+//
+//	snprintf(buf1,200,"Map: Upd %3.0fms (%2.0fHz); Trk %3.0fms (%2.0fHz); %d / %d / %d",
+//			map->msUpdate, map->nAvgUpdate,
+//			msTrackFrame, nAvgTrackFrame,
+//			currentKeyFrame->numFramesTrackedOnThis, currentKeyFrame->numMappedOnThis, (int)unmappedTrackedFrames.size());
+//
+//
+//	if(onSceenInfoDisplay);
+//		//printMessageOnCVImage(map->debugImageDepth, buf1, buf2);
+//
+//	displayDepImageMutex.lock();
+//	displayDepImage = map->debugImageDepth;
+//	displayDepImageMutex.unlock();
+//
+//	//displayMatQueue.push(map->debugImageDepth);
+//	if (displayDepthMap);
+//		//Util::displayImage( "DebugWindow DEPTH", map->debugImageDepth, false );
+//
+//}
 
 
 
@@ -397,8 +397,8 @@ bool SlamSystem::doMappingIteration()
 			if(lastTrackingClosenessScore > 1)
 				changeKeyframe(true, false, lastTrackingClosenessScore * 0.75);
 
-			if (displayDepthMap || depthMapScreenshotFlag)
-				debugDisplayDepthMap();
+//			if (displayDepthMap || depthMapScreenshotFlag)
+//				debugDisplayDepthMap();
 
 			return false;
 		}
@@ -409,15 +409,15 @@ bool SlamSystem::doMappingIteration()
 			changeKeyframe(false, true, 1.0f);
 
 
-			if (displayDepthMap || depthMapScreenshotFlag)
-				debugDisplayDepthMap();
+//			if (displayDepthMap || depthMapScreenshotFlag)
+//				debugDisplayDepthMap();
 		}
 		else
 		{
 			bool didSomething = updateKeyframe();
 
-			if (displayDepthMap || depthMapScreenshotFlag)
-				debugDisplayDepthMap();
+//			if (displayDepthMap || depthMapScreenshotFlag)
+//				debugDisplayDepthMap();
 			if(!didSomething)
 				return false;
 		}
@@ -481,8 +481,8 @@ void SlamSystem::randomInit(uchar* image, double timeStamp, int id)
 
 	currentKeyFrameMutex.unlock();
 
-	if (displayDepthMap || depthMapScreenshotFlag)
-		debugDisplayDepthMap();
+//	if (displayDepthMap || depthMapScreenshotFlag)
+//		debugDisplayDepthMap();
 
 
 	printf("Done Random initialization!\n");

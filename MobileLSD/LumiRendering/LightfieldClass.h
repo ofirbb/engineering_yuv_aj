@@ -67,6 +67,7 @@ public:
 	vector<lightfieldStructUnit> imagesAndPoses;
 	
     Mat currImage;
+    vector<Mat> images;
     Matx34d currPose;
 	unsigned char*ImgDataSeq;
 	vector<pair<int, double>> CurrFrameWeights;
@@ -80,14 +81,14 @@ public:
 
 	LightfieldClass(void);
 	
-	~LightfieldClass(void);
-
+    ~LightfieldClass(void);
 	
 	vector<pair<int, double>> GetWeights(Point3d proxyPoint, Point3d VirtualCameraLoc, vector<Point3d> AllCameraLocsP);
 	vector<Matx33d> CalculateFundamentalMat(vector<Matx34d> allcameraMat, Matx34d curP);
 	int kth;
 	Mat RenderImage(vector<Point3d> proxyPoint, Point3d VirtualCameraLoc, vector<Point3d> AllCameraLocs, Matx33d VirtualRot, Vec3d VirtualTrans);
-	Mat DrawImage(xform xf);
+//	Mat DrawImage(xform xf);
+    int DrawImage(Point3d vCameraLoc, Matx33d vP_rot, Vec3d vP_trans);
 	Mat InterpolateRenderImage(Mat Img, vector<Vec2d> proxy2DPoint);
 	int proxyWidth;
 	int proxyHeight;

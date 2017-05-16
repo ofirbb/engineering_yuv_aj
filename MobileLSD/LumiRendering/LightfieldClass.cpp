@@ -2,23 +2,9 @@
 
 bool paircomp(pair<int, double> p, pair<int, double> q) { return (p.second < q.second); }
 
-LightfieldClass::~LightfieldClass(void)
-{
-}
-
-
-//AJB-Maybe this isn't right. taken from ViewController.mm - changed Sophus::Matrix3f& to cv::Mat
-void getK(cv::Mat& K){
-    
-    //cv::fisheye::calibrate for iPad2
-    float fx = 1.1816992757731507e+03;
-    float fy = 3.3214250594664935e+02;
-    float cx = 0;
-    float cy = 0;
-    K = fx, 0.0, cx, 0.0, fy, cy, 0.0, 0.0, 1.0;
-    
-    //K << fx, 0.0, cx, 0.0, fy, cy, 0.0, 0.0, 1.0;
-    
+LightfieldClass::~LightfieldClass(void){
+    delete[] ImgDataSeq;
+    ImgDataSeq = nullptr;
 }
 
 LightfieldClass::LightfieldClass(void) : ImgDataSeq(NULL)
@@ -30,12 +16,21 @@ LightfieldClass::LightfieldClass(void) : ImgDataSeq(NULL)
 {
 
     this->ImgDataSeq = (unsigned char*)malloc(sizeof(unsigned char) * IMAGE_RESOLUTION_X * IMAGE_RESOLUTION_Y * maxNumImages * 3);
-    
+    if(this->ImgDataSeq == nullptr) {
+        std::cout << "error: malloc" << std::endl;
+    }
 
 	this->kth = 1;
 
-    getK(Camera_K);
-
+    //cv::fisheye::calibrate for iPad2
+    float fx = 1.1816992757731507e+03;
+    float fy = 3.3214250594664935e+02;
+    float cx = 0;
+    float cy = 0;
+    
+    float data[9] = {fx, 0.0, cx, 0.0, fy, cy, 0.0, 0.0, 1.0};
+    this->Camera_K = cv::Mat(3,3,cv::DataType<double>::type, data);
+    
 	//Set parameters
 	proxyWidth = 5;
 	proxyHeight = 5;
@@ -131,18 +126,23 @@ vector<pair<int, double>> LightfieldClass::GetWeights(Point3d proxyPoint, Point3
 		T.at<double>(0, 0) = AllCameraMat[i](0, 3);
 		T.at<double>(1, 0) = AllCameraMat[i](1, 3);
 		T.at<double>(2, 0) = AllCameraMat[i](2, 3);
+        //print T
 		tempProxy.push_back(proxyPoint);
 		//Vec2d curimgPoint;
         vector<cv::Point2d> curimgPoint;
 		//decomposeProjectionMatrix(AllCameraMat[i], K, R, T);
-		//Mat_<double> K = this->Camera_K;
-		Mat K(3, 3, cv::DataType<double>::type);
-		K = Camera_K.clone();
+		Mat_<double> K = this->Camera_K;
+		//Mat K(3, 3, cv::DataType<double>::type);
+		//K = Camera_K.clone();
+        
 
 		cv::Mat rvecR(3, 1, cv::DataType<double>::type);//rodrigues rotation matrix
 		cv::Rodrigues(R, rvecR);
 		try
 		{
+            /**
+            C++: void projectPoints(InputArray objectPoints, InputArray rvec, InputArray tvec, InputArray cameraMatrix, InputArray distCoeffs, OutputArray imagePoints, OutputArray jacobian=noArray(), double aspectRatio=0 )*/
+            //print mats
 			projectPoints(tempProxy, rvecR, T, K, this->discoeff, curimgPoint);
 		}
 		catch (cv::Exception & e)
@@ -190,6 +190,9 @@ vector<pair<int, double>> LightfieldClass::GetWeights(Point3d proxyPoint, Point3
 	return weights;
 }
 
+void printMat(cv::Mat mat) {
+    std::cout << mat << std::endl;
+}
 
 vector<Matx33d> LightfieldClass::CalculateFundamentalMat(vector<Matx34d> allcameraMat, 
 														 Matx34d curP)
@@ -372,19 +375,20 @@ Mat LightfieldClass::InterpolateRenderImage(Mat Img, vector<Vec2d> proxy2DPoint)
 }
 
 
-Mat LightfieldClass::DrawImage(xform xf)
+//Mat LightfieldClass::DrawImage(xform xf)
+int LightfieldClass::DrawImage(Point3d vCameraLoc, Matx33d vP_rot, Vec3d vP_trans)
 {
-	Point3d vCameraLoc;
-	vCameraLoc.x = xf[12];
-	vCameraLoc.y = xf[13];
-	vCameraLoc.z = xf[14];
-	Matx33d vP_rot(xf[0], xf[4], xf[8],
-		xf[1], xf[5], xf[9],
-		xf[2], xf[6], xf[10]);
-	Vec3d vP_trans;
-	vP_trans[0] = xf[3];
-	vP_trans[1] = xf[7];
-	vP_trans[2] = xf[11];
+//	Point3d vCameraLoc;
+//	vCameraLoc.x = xf[12];
+//	vCameraLoc.y = xf[13];
+//	vCameraLoc.z = xf[14];
+//	Matx33d vP_rot(xf[0], xf[4], xf[8],
+//		xf[1], xf[5], xf[9],
+//		xf[2], xf[6], xf[10]);
+//	Vec3d vP_trans;
+//	vP_trans[0] = xf[3];
+//	vP_trans[1] = xf[7];
+//	vP_trans[2] = xf[11];
 	vector<Point3d> AllCameraLocs;
 	for (unsigned int i = 0; i<this->AllCameraMat.size(); i++)
 	{
@@ -404,13 +408,14 @@ Mat LightfieldClass::DrawImage(xform xf)
 	cv::Size size(1024, 768);
 	Mat test;
 	resize(myImg, test, size);
-	imshow("image", test);
-	waitKey(0);
-	destroyAllWindows();
-	//cvNamedWindow("test1");
+//	imshow("image", test);
+//	waitKey(0);
+//	destroyAllWindows();
+//	//cvNamedWindow("test1");
 	//imshow("test1", test);
 
-	return myImg;
+    currImage = myImg;
+	return SUCCESS;
 
 }
 
