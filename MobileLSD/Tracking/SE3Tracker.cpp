@@ -450,7 +450,7 @@ SE3 SE3Tracker::trackFrame(
 	}
 
 
-	if(plotTracking);
+	//if(plotTracking);
 		//Util::displayImage("TrackingResidual", debugImageResiduals, false);
 
 
