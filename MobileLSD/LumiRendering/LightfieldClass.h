@@ -42,8 +42,8 @@ using namespace cv;
 #define IMAGE_RESOLUTION_X 288
 #define IMAGE_RESOLUTION_Y 352
 
-#define POSE_RESOLUTION_X 120
-#define POSE_RESOLUTION_Y 160
+//#define POSE_RESOLUTION_X 120
+//#define POSE_RESOLUTION_Y 160
 
 //essentially defines a ray bundle
 //have to calculate dimensions of the patch

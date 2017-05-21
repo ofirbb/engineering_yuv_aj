@@ -81,6 +81,9 @@
 		AB364AC81E925EC100030132 /* findImageFromPose.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AB364AC01E925EC100030132 /* findImageFromPose.cpp */; };
 		AB364ACA1E925EC100030132 /* LightfieldClass.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AB364AC21E925EC100030132 /* LightfieldClass.cpp */; };
 		AB364ACC1E925EC100030132 /* ReadInDataSet.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AB364AC51E925EC100030132 /* ReadInDataSet.cpp */; };
+		ABA063401ECAEC9300467BDF /* Icon3.png in Resources */ = {isa = PBXBuildFile; fileRef = ABA0633F1ECAEC9300467BDF /* Icon3.png */; };
+		ABA063441ECDBC5E00467BDF /* Building5.png in Resources */ = {isa = PBXBuildFile; fileRef = ABA063421ECDBC5E00467BDF /* Building5.png */; };
+		ABA063451ECDBC5E00467BDF /* Building6.png in Resources */ = {isa = PBXBuildFile; fileRef = ABA063431ECDBC5E00467BDF /* Building6.png */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -485,6 +488,9 @@
 		AB364AC71E925EC100030132 /* Xform.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Xform.h; path = LumiRendering/Xform.h; sourceTree = "<group>"; };
 		AB364ACD1E92628500030132 /* OpenGLES.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGLES.framework; path = "../../Documents/iOS-Runtime-Headers-master/Frameworks/OpenGLES.framework"; sourceTree = "<group>"; };
 		AB364ACF1E92629F00030132 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = "../../Documents/iOS-Runtime-Headers-master/Frameworks/QuartzCore.framework"; sourceTree = "<group>"; };
+		ABA0633F1ECAEC9300467BDF /* Icon3.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = Icon3.png; path = ../../../Desktop/Icon3.png; sourceTree = "<group>"; };
+		ABA063421ECDBC5E00467BDF /* Building5.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = Building5.png; path = "../../LumigraphRendering-master/Test/Building5.png"; sourceTree = "<group>"; };
+		ABA063431ECDBC5E00467BDF /* Building6.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = Building6.png; path = "../../LumigraphRendering-master/Test/Building6.png"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -1243,6 +1249,7 @@
 		6C4475931DE7A1E400316B64 = {
 			isa = PBXGroup;
 			children = (
+				ABA063411ECDBC3100467BDF /* debugging */,
 				7EF212781EBB628C00EC7ACE /* logo */,
 				7EF212671EBB5C4300EC7ACE /* arrows */,
 				6C3721C61DE9564100ADC776 /* opencv2.framework */,
@@ -1340,6 +1347,7 @@
 			isa = PBXGroup;
 			children = (
 				7EF212791EBB62BB00EC7ACE /* logo.png */,
+				ABA0633F1ECAEC9300467BDF /* Icon3.png */,
 				7EF2127A1EBB62BB00EC7ACE /* logo2.png */,
 			);
 			name = logo;
@@ -1355,6 +1363,15 @@
 				AB364AC71E925EC100030132 /* Xform.h */,
 			);
 			name = LumiRendering;
+			sourceTree = "<group>";
+		};
+		ABA063411ECDBC3100467BDF /* debugging */ = {
+			isa = PBXGroup;
+			children = (
+				ABA063421ECDBC5E00467BDF /* Building5.png */,
+				ABA063431ECDBC5E00467BDF /* Building6.png */,
+			);
+			name = debugging;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -1424,7 +1441,7 @@
 				TargetAttributes = {
 					6C44759B1DE7A1E400316B64 = {
 						CreatedOnToolsVersion = 7.3.1;
-						DevelopmentTeam = T5ELNVVE22;
+						DevelopmentTeam = Y2P56Q7B2C;
 						LastSwiftMigration = 0830;
 					};
 					6C4475B41DE7A1E400316B64 = {
@@ -1465,12 +1482,15 @@
 				6C3721AB1DE94FD400ADC776 /* UmfPackSupport in Resources */,
 				6C37218F1DE94FD400ADC776 /* CholmodSupport in Resources */,
 				6C3721961DE94FD400ADC776 /* Householder in Resources */,
+				ABA063441ECDBC5E00467BDF /* Building5.png in Resources */,
 				6C4475AF1DE7A1E400316B64 /* LaunchScreen.storyboard in Resources */,
 				6C3721901DE94FD400ADC776 /* CMakeLists.txt in Resources */,
 				7EF212751EBB5C7D00EC7ACE /* arrow_up_left.png in Resources */,
+				ABA063401ECAEC9300467BDF /* Icon3.png in Resources */,
 				6C37219B1DE94FD400ADC776 /* OrderingMethods in Resources */,
 				7EF212721EBB5C7D00EC7ACE /* arrow_down.png in Resources */,
 				1118C8111DF7AB4100D98BCC /* scalebar.png in Resources */,
+				ABA063451ECDBC5E00467BDF /* Building6.png in Resources */,
 				6C3721A91DE94FD400ADC776 /* SuperLUSupport in Resources */,
 				7EF212771EBB5C7D00EC7ACE /* arrow_up.png in Resources */,
 				6C3721A71DE94FD400ADC776 /* StdList in Resources */,
@@ -1700,7 +1720,7 @@
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_USE_OPTIMIZATION_PROFILE = NO;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
-				DEVELOPMENT_TEAM = T5ELNVVE22;
+				DEVELOPMENT_TEAM = Y2P56Q7B2C;
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -1719,7 +1739,7 @@
 					"$(PROJECT_DIR)",
 					/Users/ddbruce/Documents,
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = yjacobowitz;
+				PRODUCT_BUNDLE_IDENTIFIER = ddbruce;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_OBJC_BRIDGING_HEADER = "MobileLSD/MobileLSD-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
@@ -1735,7 +1755,7 @@
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_USE_OPTIMIZATION_PROFILE = NO;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
-				DEVELOPMENT_TEAM = T5ELNVVE22;
+				DEVELOPMENT_TEAM = Y2P56Q7B2C;
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -1754,7 +1774,7 @@
 					"$(PROJECT_DIR)",
 					/Users/ddbruce/Documents,
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = yjacobowitz;
+				PRODUCT_BUNDLE_IDENTIFIER = ddbruce;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_OBJC_BRIDGING_HEADER = "MobileLSD/MobileLSD-Bridging-Header.h";
 				SWIFT_VERSION = 3.0;

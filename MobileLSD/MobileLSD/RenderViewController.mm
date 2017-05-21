@@ -16,12 +16,20 @@
 #include <iostream>
 #include "SlamSystem.h"
 #include "LightfieldClass.h"
-#include "Xform.h"
+
+#include <iostream>
+
+#include "SlamSystem.h"
+#include "LightfieldClass.h"
+
 
 
 @interface RenderViewController () {
     xform xf;
     UIButton *saveButton_;
+    int renderNum;
+    
+
 }
 @end
 
@@ -37,6 +45,38 @@
         // Custom initialization
     }
     return self;
+}
+
+
+- (cv::Mat)cvMatFromUIImage:(UIImage *)image
+{
+    CGColorSpaceRef colorSpace = CGImageGetColorSpace(image.CGImage);
+    CGFloat cols = image.size.width;
+    CGFloat rows = image.size.height;
+    
+    cv::Mat cvMat(rows, cols, CV_8UC4); // 8 bits per component, 4 channels (color channels + alpha)
+    
+    CGContextRef contextRef = CGBitmapContextCreate(cvMat.data,                 // Pointer to  data
+                                                    cols,                       // Width of bitmap
+                                                    rows,                       // Height of bitmap
+                                                    8,                          // Bits per component
+                                                    cvMat.step[0],              // Bytes per row
+                                                    colorSpace,                 // Colorspace
+                                                    kCGImageAlphaNoneSkipLast |
+                                                    kCGBitmapByteOrderDefault); // Bitmap info flags
+    
+    CGContextDrawImage(contextRef, CGRectMake(0, 0, cols, rows), image.CGImage);
+    CGContextRelease(contextRef);
+    
+    
+    Point2f src_center(cvMat.cols/2.0F, cvMat.rows/2.0F);
+    cv::Mat rot_mat = getRotationMatrix2D(src_center, 180, 1.0);
+    cv::Mat dst;
+    warpAffine(cvMat, dst, rot_mat, cvMat.size());
+    cvMat = dst;
+    
+    
+    return cvMat;
 }
 
 
@@ -83,12 +123,84 @@
     return finalImage;
 }
 
+
+
+
+-(void)debugFunction {
+    
+    NSString* filePath = [[NSBundle mainBundle]
+                          pathForResource:@"Building5" ofType:@"png"];
+    UIImage* input1 = [UIImage imageWithContentsOfFile:filePath];
+    
+    cv::Mat src1 = [self cvMatFromUIImage:input1];
+    std::cout << "width:1" << src1.rows << std::endl;
+    std::cout << "height: " << src1.cols << std::endl;
+    
+    //resize image1
+    cv::Size size(288, 352);//the dst image size,e.g.100x100
+    cv::Mat image1;//dst image
+    resize(src1,image1,size);//resize image
+    
+    
+    Matx34d tempPose1 = Matx34d(1. ,0. ,0. ,0. ,0. ,1. ,0. ,0. ,0. ,0. ,1. ,0.);
+    
+    
+    unsigned char *input = (unsigned char *)(image1.data);
+    //int de = image.channels();
+    std::memcpy(lightfield_->ImgDataSeq + 3 * image1.cols * image1.rows + lightfield_->numImages,
+                input, 3 * image1.cols * image1.rows);
+    
+    lightfield_->AllCameraMat.push_back(tempPose1);
+    lightfield_->images.push_back(image1);
+    lightfield_->numImages++;
+    
+    NSString* filePath2 = [[NSBundle mainBundle]
+                           pathForResource:@"Building6" ofType:@"png"];
+    UIImage* input2 = [UIImage imageWithContentsOfFile:filePath2];
+    cv::Mat src2 = [self cvMatFromUIImage:input2];
+    
+    //resize image2
+    cv::Mat image2;//dst image
+    resize(src2,image2,size);//resize image
+    
+    
+    
+    Matx34d tempPose2 = Matx34d(
+                                9.9907816355645818e-001 ,-1.3467530285943021e-002,
+                                4.0760872569797033e-002 ,-9.9748073436781359e-001,
+                                1.3421995009699820e-002 ,9.9990895399863011e-001,
+                                1.3905981897279823e-003 ,-1.6508926480737356e-002,
+                                -4.0775889378572898e-002 ,-8.4222405741551628e-004,
+                                9.9916796260890162e-001 ,6.8990143582258051e-002);
+    
+    input = (unsigned char *)(image2.data);
+    //int de = image.channels();
+    std::memcpy(lightfield_->ImgDataSeq + 3 * image2.cols * image2.rows + lightfield_->numImages,
+                input, 3 * image1.cols * image1.rows);
+    
+    
+    lightfield_->AllCameraMat.push_back(tempPose2);
+    lightfield_->images.push_back(image2);
+    ++(lightfield_->numImages);
+    
+    lightfield_->currImage = image1;
+    lightfield_->currPose = tempPose1;
+    
+    
+    
+}
+
+
+
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    [self debugFunction];
+    
     
     //initially, set image to the most recent image
     [self updateRenderImage];
+    renderNum = 0;
     
     saveButton_ = [self simpleButton:@"Save" buttonColor:[UIColor blackColor]];
     // Important part that connects the action to the member function buttonWasPressed
@@ -159,6 +271,7 @@
     UIImageWriteToSavedPhotosAlbum(renderedImageView.image, nil, nil, nil);
 }
 
+
 -(void)moveViewWithGestureRecognizer:(UIPanGestureRecognizer *)panGestureRecognizer{
    
     CGPoint startLocation;
@@ -173,38 +286,34 @@
     }
     double dx = (double) stopLocation.x - startLocation.x;
     double dy = (double) stopLocation.y - startLocation.y;
-    bool planB = true;
     
+    bool planB = false;
     
-    if(planB) {
-        
-        //    dx = dx/self.view.frame.size.height;
-        //    dy = dy/self.view.frame.size.width;
-        
-        int num = rand() % lightfield_->images.size();
-        std::cout << lightfield_->images.size() << std::endl;
-        std::cout << num << std::endl;
-        
-        lightfield_->currImage = lightfield_->images.at(num);
-        
-        [self updateRenderImage];
-        
-        
-    }
+    if(dx + dy > 100) {
     
-    else {
+        if(planB ) {
+        
+            ++renderNum;
+            int num = renderNum % lightfield_->images.size();
+            lightfield_->currImage = lightfield_->images.at(num);
+            [self updateRenderImage];
+        
+        }
     
-    //need: Point3d vCameraLoc, Matx33d vP_rot, Vec3d vP_trans
-    Matx33d vP_rot = Matx33d(1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0);
-    Vec3d vP_trans = Vec3d(1.0, 1.0, 0.0);
-    Point3d vCameraLoc = Point3d();
-    int res = lightfield_->DrawImage(vCameraLoc, vP_rot, vP_trans);
-    if(res == SUCCESS) {
-        [self updateRenderImage];
-    }
-    else {
-        std::cout << "DrawImage did not succeed" << std::endl;
-    }
+        else {
+    
+            //need: Point3d vCameraLoc, Matx33d vP_rot, Vec3d vP_trans
+            Matx33d vP_rot = Matx33d(1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0);
+            Vec3d vP_trans = Vec3d(0.0, 0.0, 0.0);
+            Point3d vCameraLoc(0.0, 0.0, 0.0);
+            int res = lightfield_->DrawImage(vCameraLoc, vP_rot, vP_trans);
+            if(res == SUCCESS) {
+                [self updateRenderImage];
+            }
+            else {
+                std::cout << "DrawImage did not succeed" << std::endl;
+            }
+        }
     }
 }
 

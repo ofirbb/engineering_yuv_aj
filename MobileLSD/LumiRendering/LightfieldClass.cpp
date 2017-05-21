@@ -14,7 +14,6 @@ LightfieldClass::LightfieldClass(void) : ImgDataSeq(NULL)
 , numImages(0)
 
 {
-
     this->ImgDataSeq = (unsigned char*)malloc(sizeof(unsigned char) * IMAGE_RESOLUTION_X * IMAGE_RESOLUTION_Y * maxNumImages * 3);
     if(this->ImgDataSeq == nullptr) {
         std::cout << "error: malloc" << std::endl;
@@ -25,48 +24,13 @@ LightfieldClass::LightfieldClass(void) : ImgDataSeq(NULL)
     //cv::fisheye::calibrate for iPad2
     float fx = 1.1816992757731507e+03;
     float fy = 3.3214250594664935e+02;
-    float cx = 0;
-    float cy = 0;
-    
-    float data[9] = {fx, 0.0, cx, 0.0, fy, cy, 0.0, 0.0, 1.0};
-    this->Camera_K = cv::Mat(3,3,cv::DataType<double>::type, data);
+    float cy = 0.0;
+    float cx = 0.0;
+    this->Camera_K = (Mat1d(3, 3) << fx, 0, cx, 0, fy, cy, 0, 0, 1);
     
 	//Set parameters
 	proxyWidth = 5;
 	proxyHeight = 5;
-
-//	//Get Image Data
-//	// Then grab the data
-//	FILE *lfdatafile = fopen(fullPathData.c_str(), "rb");
-//	if (lfdatafile == NULL) {
-//		printf("Could not open file %s", fullPathData.c_str());
-//		return;
-//	}
-//	fread(this->ImgDataSeq, IMAGE_RESOLUTION_X * IMAGE_RESOLUTION_Y * numImages * 3, 1, lfdatafile);
-//	fclose(lfdatafile);
-
-
-
-//    //Set Camera Matrix for each image
-//	FileStorage fs1(cameraMat, FileStorage::READ);
-//	for (unsigned int i = 0; i < imagelists.size(); i++)
-//	{
-//		int namelength = (int)imagelists[i].length() - 4;
-//		Mat tempMat;
-//
-//		string MatName = imagelists[i].substr(0, namelength);
-//		fs1[MatName] >> tempMat;
-//
-//		Mat_<double>tempCMat(3, 4);
-//		tempCMat = tempMat;
-//		Matx34d tempCMat1;
-//		tempCMat1 = Matx34d(tempCMat(0, 0), tempCMat(0, 1), tempCMat(0, 2), tempCMat(0, 3),
-//			tempCMat(1, 0), tempCMat(1, 1), tempCMat(1, 2), tempCMat(1, 3),
-//			tempCMat(2, 0), tempCMat(2, 1), tempCMat(2, 2), tempCMat(2, 3));
-//		AllCameraMat.push_back(tempCMat1);
-//	}
-//	fs1.release();
-//    
 
 	//Proxy info-DONE
 	for (int j = 0; j < proxyHeight; ++j) {
@@ -85,8 +49,12 @@ LightfieldClass::LightfieldClass(void) : ImgDataSeq(NULL)
 
 
 
+void printMat(cv::Mat mat) {
+    std::cout << "printing mat" << std::endl;
+    std::cout << mat << std::endl;
+}
 
-vector<pair<int, double>> LightfieldClass::GetWeights(Point3d proxyPoint, Point3d VirtualCameraLoc, 
+vector<pair<int, double>> LightfieldClass::GetWeights(Point3d proxyPoint, Point3d VirtualCameraLoc,
 													  vector<Point3d> AllCameraLocs)
 {
 	vector<pair<int, double>> weights;
@@ -143,7 +111,9 @@ vector<pair<int, double>> LightfieldClass::GetWeights(Point3d proxyPoint, Point3
             /**
             C++: void projectPoints(InputArray objectPoints, InputArray rvec, InputArray tvec, InputArray cameraMatrix, InputArray distCoeffs, OutputArray imagePoints, OutputArray jacobian=noArray(), double aspectRatio=0 )*/
             //print mats
-			projectPoints(tempProxy, rvecR, T, K, this->discoeff, curimgPoint);
+            printMat(rvecR);
+            printMat(T);
+            projectPoints(tempProxy, rvecR, T, K, this->discoeff, curimgPoint);
 		}
 		catch (cv::Exception & e)
 		{
@@ -190,10 +160,6 @@ vector<pair<int, double>> LightfieldClass::GetWeights(Point3d proxyPoint, Point3
 	return weights;
 }
 
-void printMat(cv::Mat mat) {
-    std::cout << mat << std::endl;
-}
-
 vector<Matx33d> LightfieldClass::CalculateFundamentalMat(vector<Matx34d> allcameraMat, 
 														 Matx34d curP)
 {
@@ -235,8 +201,11 @@ Mat LightfieldClass::RenderImage(vector<cv::Point3d> proxyPoint, cv::Point3d Vir
 		double addWeightInten_R = 0;
 		double addWeightInten_G = 0;
 		double addWeightInten_B = 0;
+        Mat K = this->Camera_K; //AJB
+        printMat(this->Camera_K);
 		for (int i = 0; i<this->kth; i++)
 		{
+            printMat(K);
 			//vector<Point2d> curimgPoint;
 			int Num = CurrFrameWeights[i].first;
 
@@ -253,10 +222,10 @@ Mat LightfieldClass::RenderImage(vector<cv::Point3d> proxyPoint, cv::Point3d Vir
 			//Vec2d curimgPoint;
 			vector<cv::Point2d> curimgPoint;
 			//decomposeProjectionMatrix(AllCameraMat[i], K, R, T);
-			Mat K = this->Camera_K;
+			
 			cv::Mat rvecR(3, 1, cv::DataType<double>::type);//rodrigues rotation matrix
 			cv::Rodrigues(R, rvecR);
-
+            Mat K = this->Camera_K;
 			//projectPoints((Vec3d)proxyPoint[numP], K, R, T, NULL, curimgPoint);
 			projectPoints(tempProxy, rvecR, T, K, this->discoeff, curimgPoint);
 			if (curimgPoint[0].x > IMAGE_RESOLUTION_X || curimgPoint[0].y > IMAGE_RESOLUTION_Y)
@@ -289,7 +258,13 @@ Mat LightfieldClass::RenderImage(vector<cv::Point3d> proxyPoint, cv::Point3d Vir
 		//int Num = CurrFrameWeights[i].first;
 		//decomposeProjectionMatrix(VirtualP, K1, R1, T1);
 		//projectPoints((tempProxy, this->Camera_K, VirtualRot, VirtualTrans, this->discoeff, virtualPoint);
-		projectPoints(tempProxy, vR, vT, this->Camera_K, this->discoeff, virtualPoint);
+		projectPoints(tempProxy, vR, vT, K, this->discoeff, virtualPoint);
+        
+        printMat(vR);
+        printMat(vT);
+        printMat(K);
+        printMat(this->discoeff);
+        
 		if (virtualPoint[0].x > IMAGE_RESOLUTION_X || virtualPoint[0].y > IMAGE_RESOLUTION_Y)
 			continue;
 		//assign intesity to Img
@@ -310,6 +285,9 @@ Mat LightfieldClass::RenderImage(vector<cv::Point3d> proxyPoint, cv::Point3d Vir
 		Vec2d myPoint;
 		myPoint[0] = virtualPoint[0].y;
 		myPoint[1] = virtualPoint[0].x;
+        std::cout <<"x: " << virtualPoint[0].x << std::endl;
+        std::cout <<"y: " << virtualPoint[0].y << std::endl;
+        
 		ProxyProjectPoint.push_back(myPoint);
 	}
 	Mat RenderedImg = this->InterpolateRenderImage(Img, ProxyProjectPoint);
@@ -389,6 +367,7 @@ int LightfieldClass::DrawImage(Point3d vCameraLoc, Matx33d vP_rot, Vec3d vP_tran
 //	vP_trans[0] = xf[3];
 //	vP_trans[1] = xf[7];
 //	vP_trans[2] = xf[11];
+    
 	vector<Point3d> AllCameraLocs;
 	for (unsigned int i = 0; i<this->AllCameraMat.size(); i++)
 	{
