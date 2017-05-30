@@ -26,7 +26,7 @@
 
 //#include <GLFW/glfw3.h>
 //#include <glut.h>
-#include "XForm.h"
+//#include "XForm.h"
 #include "ReadInDataSet.h"
 //#include "ViewController.h"
 
@@ -39,16 +39,11 @@ using namespace cv;
 #define NUM_FRAMING_IMAGES 3
 //#define IMAGE_RESOLUTION_X 480
 //#define IMAGE_RESOLUTION_Y 640
-#define IMAGE_RESOLUTION_X 288
-#define IMAGE_RESOLUTION_Y 352
+#define IMAGE_RESOLUTION_HEIGHT 288
+#define IMAGE_RESOLUTION_WIDTH 352
+#define IMAGE_RESOLUTION_Y 288
+#define IMAGE_RESOLUTION_X 352
 
-//#define POSE_RESOLUTION_X 120
-//#define POSE_RESOLUTION_Y 160
-
-//essentially defines a ray bundle
-//have to calculate dimensions of the patch
-//typedef pair<Point2f, int> pointAndPixel;
-//typedef map<Point2f, pointAndPixel> lightfieldStruct;
 
 struct lightfieldStructUnit {
 
@@ -65,6 +60,7 @@ public:
 	int maxNumImages;
     int numImages;
 	vector<lightfieldStructUnit> imagesAndPoses;
+    Vec3d currentTranslation;
 	
     Mat currImage;
     vector<Mat> images;

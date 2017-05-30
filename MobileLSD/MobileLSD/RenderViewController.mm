@@ -25,7 +25,7 @@
 
 
 @interface RenderViewController () {
-    xform xf;
+    //xform xf;
     UIButton *saveButton_;
     int renderNum;
     
@@ -143,16 +143,26 @@
     
     
     Matx34d tempPose1 = Matx34d(1. ,0. ,0. ,0. ,0. ,1. ,0. ,0. ,0. ,0. ,1. ,0.);
+    double x = tempPose1(0,3);
+    double y = tempPose1(1,3);
     
+    cout << x << endl;
+    cout << y << endl;
     
     unsigned char *input = (unsigned char *)(image1.data);
     //int de = image.channels();
     std::memcpy(lightfield_->ImgDataSeq + 3 * image1.cols * image1.rows + lightfield_->numImages,
                 input, 3 * image1.cols * image1.rows);
     
-    lightfield_->AllCameraMat.push_back(tempPose1);
-    lightfield_->images.push_back(image1);
-    lightfield_->numImages++;
+//    lightfield_->AllCameraMat.push_back(tempPose1);
+//    lightfield_->images.push_back(image1);
+//    lightfield_->numImages++;
+
+    lightfieldStructUnit newUnit;
+    newUnit.image = image1;
+    newUnit.pose = tempPose1;
+    lightfield_->imagesAndPoses.push_back(newUnit);
+
     
     NSString* filePath2 = [[NSBundle mainBundle]
                            pathForResource:@"Building6" ofType:@"png"];
@@ -186,6 +196,12 @@
     lightfield_->currImage = image1;
     lightfield_->currPose = tempPose1;
     
+    lightfieldStructUnit newUnit2;
+    newUnit2.image = image2;
+    newUnit2.pose = tempPose2;
+    lightfield_->imagesAndPoses.push_back(newUnit2);
+    
+    
     
     
 }
@@ -195,16 +211,16 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    [self debugFunction];
+    //[self debugFunction];
     
     
     //initially, set image to the most recent image
     [self updateRenderImage];
     renderNum = 0;
-    
-    saveButton_ = [self simpleButton:@"Save" buttonColor:[UIColor blackColor]];
-    // Important part that connects the action to the member function buttonWasPressed
-    [saveButton_ addTarget:self action:@selector(saveWasPressed) forControlEvents:UIControlEventTouchUpInside];
+//    
+//    saveButton_ = [self simpleButton:@"Save" buttonColor:[UIColor blackColor]];
+//    // Important part that connects the action to the member function buttonWasPressed
+//    [saveButton_ addTarget:self action:@selector(saveWasPressed) forControlEvents:UIControlEventTouchUpInside];
 
 
     UIPanGestureRecognizer *panGestureRecognizer = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(moveViewWithGestureRecognizer:)];
@@ -237,6 +253,11 @@
     self.renderedImageView.image = image;
     [self.view addSubview:renderedImageView];
     
+    
+    saveButton_ = [self simpleButton:@"Save" buttonColor:[UIColor blackColor]];
+    // Important part that connects the action to the member function buttonWasPressed
+    [saveButton_ addTarget:self action:@selector(saveWasPressed) forControlEvents:UIControlEventTouchUpInside];
+
     
 }
 
@@ -274,79 +295,42 @@
 
 -(void)moveViewWithGestureRecognizer:(UIPanGestureRecognizer *)panGestureRecognizer{
    
-    CGPoint startLocation;
-    CGPoint stopLocation;
-    if (panGestureRecognizer.state == UIGestureRecognizerStateBegan) {
-        startLocation = [panGestureRecognizer locationInView:self.view];
+    double movement = 0.2;
+    
+    double transX = 0;
+    double transY = 0;
+    
+    
+    CGPoint vel = [panGestureRecognizer velocityInView:self.view];
+    if(vel.x > 0) {
+        transX = movement;
+    }
+    else if (vel.x < 0){
+        transX = -movement;
+    }
+    if(vel.y > 0) {
+        transY = movement;
+    }
+    else if (vel.y < 0){
+        transY = -movement;
     }
     
-    else if (panGestureRecognizer.state == UIGestureRecognizerStateEnded) {
-        stopLocation = [panGestureRecognizer locationInView:self.view];
-        
+
+    Matx33d vP_rot = Matx33d(1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0);
+    Vec3d vP_trans = Vec3d(transX, transY, 0.0);
+    Point3d vCameraLoc(0.0, 0.0, 0.0);
+    lightfield_->currentTranslation[0] += transX;
+    lightfield_->currentTranslation[1] += transY;
+    
+    cout << "translation: " << lightfield_->currentTranslation << endl;
+
+    int res = lightfield_->DrawImage(vCameraLoc, vP_rot, lightfield_->currentTranslation);
+    if(res == SUCCESS) {
+        [self updateRenderImage];
     }
-    double dx = (double) stopLocation.x - startLocation.x;
-    double dy = (double) stopLocation.y - startLocation.y;
-    
-    bool planB = false;
-    
-    if(dx + dy > 100) {
-    
-        if(planB ) {
-        
-            ++renderNum;
-            int num = renderNum % lightfield_->images.size();
-            lightfield_->currImage = lightfield_->images.at(num);
-            [self updateRenderImage];
-        
-        }
-    
-        else {
-    
-            //need: Point3d vCameraLoc, Matx33d vP_rot, Vec3d vP_trans
-            Matx33d vP_rot = Matx33d(1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0);
-            Vec3d vP_trans = Vec3d(0.0, 0.0, 0.0);
-            Point3d vCameraLoc(0.0, 0.0, 0.0);
-            int res = lightfield_->DrawImage(vCameraLoc, vP_rot, vP_trans);
-            if(res == SUCCESS) {
-                [self updateRenderImage];
-            }
-            else {
-                std::cout << "DrawImage did not succeed" << std::endl;
-            }
-        }
+    else {
+        std::cout << "DrawImage did not succeed" << std::endl;
     }
 }
-
-
-
--(void)handleSingleTapGesture:(UITapGestureRecognizer *)tapGestureRecognizer{
-//    CGFloat newWidth = 100.0;
-//    if (self.testView.frame.size.width == 100.0) {
-//        newWidth = 200.0;
-//    }
-//    
-//    CGPoint currentCenter = self.testView.center;
-//    
-//    self.testView.frame = CGRectMake(self.testView.frame.origin.x, self.testView.frame.origin.y, newWidth, self.testView.frame.size.height);
-//    self.testView.center = currentCenter;
-}
-
-
--(void)handleDoubleTapGesture:(UITapGestureRecognizer *)tapGestureRecognizer{
-//    CGSize newSize = CGSizeMake(100.0, 100.0);
-//    if (self.testView.frame.size.width == 100.0) {
-//        newSize.width = 200.0;
-//        newSize.height = 200.0;
-//    }
-//    
-//    CGPoint currentCenter = self.testView.center;
-//    
-//    self.testView.frame = CGRectMake(self.testView.frame.origin.x, self.testView.frame.origin.y, newSize.width, newSize.height);
-//    self.testView.center = currentCenter;
-}
-
-
-
-
 
 @end

@@ -20,16 +20,23 @@ LightfieldClass::LightfieldClass(void) : ImgDataSeq(NULL)
     }
 
 	this->kth = 1;
-
+    this->currentTranslation = Vec3d(1.0, 1.0, 0.0);
     //cv::fisheye::calibrate for iPad2
     float fx = 1.1816992757731507e+03;
     float fy = 3.3214250594664935e+02;
     float cy = 0.0;
     float cx = 0.0;
-    this->Camera_K = (Mat1d(3, 3) << fx, 0, cx, 0, fy, cy, 0, 0, 1);
     
-	//Set parameters
-	proxyWidth = 5;
+    this->Camera_K = (Mat1d(3,3) << 657.46697, 0, 1632, 0, 657.4466, 1224, 0, 0, 1);
+    //this->Camera_K = (Mat1d(3, 3) << fx, 0, cx, 0, fy, cy, 0, 0, 1);
+    this->discoeff = Mat(-0.4180, 0.507, 0, 0, -0.578);
+    
+    
+//	//Set parameters
+//    this->t_width = 3264;
+//    this->s_height = 2448;
+//    
+    proxyWidth = 5;
 	proxyHeight = 5;
 
 	//Proxy info-DONE
@@ -352,49 +359,49 @@ Mat LightfieldClass::InterpolateRenderImage(Mat Img, vector<Vec2d> proxy2DPoint)
 	return Img;
 }
 
-
-//Mat LightfieldClass::DrawImage(xform xf)
-int LightfieldClass::DrawImage(Point3d vCameraLoc, Matx33d vP_rot, Vec3d vP_trans)
-{
-//	Point3d vCameraLoc;
-//	vCameraLoc.x = xf[12];
-//	vCameraLoc.y = xf[13];
-//	vCameraLoc.z = xf[14];
-//	Matx33d vP_rot(xf[0], xf[4], xf[8],
-//		xf[1], xf[5], xf[9],
-//		xf[2], xf[6], xf[10]);
-//	Vec3d vP_trans;
-//	vP_trans[0] = xf[3];
-//	vP_trans[1] = xf[7];
-//	vP_trans[2] = xf[11];
-    
-	vector<Point3d> AllCameraLocs;
-	for (unsigned int i = 0; i<this->AllCameraMat.size(); i++)
-	{
-		Matx33d K, R;
-		Vec3d T;
-		Point3d vLoc;
-		//decomposeProjectionMatrix(this->AllCameraMat[i], K, R, T);
-		vLoc.x = AllCameraMat[i](0, 3);
-		vLoc.y = AllCameraMat[i](1, 3);
-		vLoc.z = AllCameraMat[i](2, 3);
-		AllCameraLocs.push_back(vLoc);
-
-	}
-
-	Mat myImg = this->RenderImage(this->proxyData, vCameraLoc, AllCameraLocs, 
-								  vP_rot, vP_trans);
-	cv::Size size(1024, 768);
-	Mat test;
-	resize(myImg, test, size);
-//	imshow("image", test);
-//	waitKey(0);
-//	destroyAllWindows();
-//	//cvNamedWindow("test1");
-	//imshow("test1", test);
-
-    currImage = myImg;
-	return SUCCESS;
-
-}
-
+//
+////Mat LightfieldClass::DrawImage(xform xf)
+//int LightfieldClass::DrawImage(Point3d vCameraLoc, Matx33d vP_rot, Vec3d vP_trans)
+//{
+////	Point3d vCameraLoc;
+////	vCameraLoc.x = xf[12];
+////	vCameraLoc.y = xf[13];
+////	vCameraLoc.z = xf[14];
+////	Matx33d vP_rot(xf[0], xf[4], xf[8],
+////		xf[1], xf[5], xf[9],
+////		xf[2], xf[6], xf[10]);
+////	Vec3d vP_trans;
+////	vP_trans[0] = xf[3];
+////	vP_trans[1] = xf[7];
+////	vP_trans[2] = xf[11];
+//    
+//	vector<Point3d> AllCameraLocs;
+//	for (unsigned int i = 0; i<this->AllCameraMat.size(); i++)
+//	{
+//		Matx33d K, R;
+//		Vec3d T;
+//		Point3d vLoc;
+//		//decomposeProjectionMatrix(this->AllCameraMat[i], K, R, T);
+//		vLoc.x = AllCameraMat[i](0, 3);
+//		vLoc.y = AllCameraMat[i](1, 3);
+//		vLoc.z = AllCameraMat[i](2, 3);
+//		AllCameraLocs.push_back(vLoc);
+//
+//	}
+//
+//	Mat myImg = this->RenderImage(this->proxyData, vCameraLoc, AllCameraLocs, 
+//								  vP_rot, vP_trans);
+//	cv::Size size(1024, 768);
+//	Mat test;
+//	resize(myImg, test, size);
+////	imshow("image", test);
+////	waitKey(0);
+////	destroyAllWindows();
+////	//cvNamedWindow("test1");
+//	//imshow("test1", test);
+//
+//    currImage = myImg;
+//	return SUCCESS;
+//
+//}
+//

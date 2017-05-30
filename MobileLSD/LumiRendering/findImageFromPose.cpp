@@ -1,178 +1,174 @@
-//#include <stdio.h>
-//#include <iostream>
-//#include <vector>
-//#include <string>
-//#include <math.h>
-//#include <stdlib.h>
-//
-//
-//
-//#include "opencv2/core/core.hpp"
-//#include "opencv2/features2d/features2d.hpp"
-//#include "opencv2/highgui/highgui.hpp"
-//#include <opencv2/calib3d/calib3d.hpp>
-////#include "opencv2/nonfree/features2d.hpp"
-//#include <opencv2/core/core.hpp>
-//#include <opencv2/imgproc/imgproc.hpp>
-//
-////#include "dfsFolder.h"
-//#include "LightfieldClass.h"
-//
-//
-//
-//using namespace std;
-//using namespace cv;
-//
-//
-//
-//
-////Globals
-//GLCamera camera;
-//xform xf;
-//static unsigned buttonstate = 0;
-//Vec3f center(0, 0, 0);
-//double camera_size = 5.0;
-//
-//#define WIDTH 640
-//#define HEIGHT 480
-//#define DEBUG 0
-//
-//
-////Display Function; this function calls DrawImage
-//void redraw()
-//{
-//	camera.setupGL(xf * center, camera_size);
-//	glClearColor(1, 1, 1, 1);
-//	glClearDepth(1);
-//	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-//	glDisable(GL_CULL_FACE);
-//	float* pixels = (float*)malloc(sizeof(float) * lg[0].IMAGE_RESOLUTION_X * lg[0].s_height * 3);
-//	int index = 0;
-//
-//	glMatrixMode(GL_PROJECTION);
-//	glMultMatrixd(xf);
-//	Mat Img_ori = lg[0].DrawImage(xf);
-//	Mat Img;
-//	Size size(WIDTH, HEIGHT);
-//	resize(Img_ori, Img, size);
-//
-//	for (int s = 0; s<HEIGHT; s++)
-//	{
-//		for (int t = 0; t<WIDTH; t++)
-//		{
-//			pixels[index] = *(Img.data + Img.step[0] * s + Img.step[1] * t);
-//			pixels[index + 1] = *(Img.data + Img.step[0] * s + Img.step[1] * t + 1);
-//			pixels[index + 2] = *(Img.data + Img.step[0] * s + Img.step[1] * t + 2);
-//			index += 3;
-//		}
-//	}
-//	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-//	glDrawPixels(WIDTH, HEIGHT, GL_RGB, GL_UNSIGNED_BYTE, pixels);
-//	glutSwapBuffers();
-//	glPopMatrix();
-//}
-//
-////Mouse Function
-//void mousemotionfunc(int x, int y)
-//{
-//	static const Mouse::button physical_to_logical_map[] = {
-//		Mouse::NONE, Mouse::ROTATE, Mouse::MOVEXY, Mouse::MOVEZ,
-//		Mouse::MOVEZ, Mouse::MOVEXY, Mouse::MOVEXY, Mouse::MOVEXY,
-//	};
-//
-//	Mouse::button b = Mouse::NONE;
-//
-//	if (buttonstate & (1 << 4))
-//		b = Mouse::WHEELUP;
-//	else
-//	{
-//		if (buttonstate & (1 << 3))
-//			b = Mouse::WHEELDOWN;
-//		else
-//			b = physical_to_logical_map[buttonstate & 7];
-//	}
-//	//b = Mouse::MOVEXY;
-//	camera.mouse(x, y, b, xf * center, camera_size, xf);
-//	if (b != Mouse::NONE)
-//		glutPostRedisplay();
-//}
-//
-//void mousebuttonfunc(int button, int state, int x, int y)
-//{
-//	if (state == GLUT_DOWN)
-//		buttonstate |= (1 << button);
-//	else
-//		buttonstate = 0;//buttonstate &= ~(1 << button);
-//
-//	mousemotionfunc(x, y);
-//}
-//
-//void init(string in)
-//{
-//	lg.push_back(Lumigraph(in));
-//
-//}
-//
-//void resetview()
-//{
-//	xf = xform::trans(0, 0, -5.0f * camera_size) * xform::trans(-center);
-//	//camera.stopspin();
-//	buttonstate = 0;
-//}
-//
-//int LightFieldClass::findImageFromPose(void) {
-//
-//	//string filepath = "C:\\HomeWork&Project\\CS684\\DataBase\\preview\\";
-//	try
-//	{
-////		//string filepath = "C:\\OpenCV_Project\\SFM_Exp\\Test\\";
-////		string filepath = "C:\\Users\\ajbruce\\vs2015\\Projects\\Lumigraph\\Lumigraph\\Test\\";
-////		string data = "Building";
-////		int WriteTXT = 0;
-////		if (WriteTXT == 1)
-////		{
-////			string dataTXT = filepath + data + ".txt";
-////			ofstream fout(dataTXT, ios::app);
-////			dfsFolder(filepath, fout);
-////		}
-////		ReadInImages(filepath, data);
-//        
-//        lg = *(this);
-//        
-//        //display an image from the scene with its center-point
-//        
-//        //track the swiping and render image based on the swipe direction
-//        //and length
-//
-//		glutInitWindowPosition(100, 0);
-//		glutInitWindowSize(WIDTH, HEIGHT);
-//		glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGBA | GLUT_DEPTH);
-//		glutInit(&argc, argv);
-//		glutCreateWindow("Unstructured Lumigraph Viewer");
-//		glEnable(GL_TEXTURE_2D);
-//
-//		glutDisplayFunc(redraw);
-//		glutMouseFunc(mousebuttonfunc);
-//		glutMotionFunc(mousemotionfunc);
-//		resetview();
-//
-//		string filename = filepath + data;
-//		init(filename.c_str());
-//		glutMainLoop();
-//        
-//        return SUCCESS;
-//    }
-//
-//	}
-//	catch (cv::Exception & e)
-//	{
-//		cout << e.msg << endl;
-//	}
-//
-//}
-//
-//
-//
-//
-//
-//	
+
+#include "opencv2/core/core.hpp"
+#include "opencv2/features2d/features2d.hpp"
+#include "opencv2/highgui/highgui.hpp"
+#include <opencv2/calib3d/calib3d.hpp>
+//#opencv2/imgcodecs/ios.h
+//#include "opencv2/nonfree/features2d.hpp"
+#include <opencv2/core/core.hpp>
+#include <opencv2/imgproc/imgproc.hpp>
+
+#include <stdio.h>
+#include <iostream>
+#include <vector>
+#include <map>
+#include <string>
+#include <math.h>
+#include <algorithm>
+#include <utility>
+#include <iostream>
+#include <stdlib.h>
+
+
+#include "ReadInDataSet.h"
+#include "LightfieldClass.h"
+
+using namespace std;
+using namespace cv;
+
+
+//Mat LightfieldClass::DrawImage(xform xf)
+int LightfieldClass::DrawImage(Point3d vCameraLoc, Matx33d vP_rot, Vec3d vP_trans)
+{
+    double virtual_X = vP_trans[0];
+    double virtual_Y = vP_trans[1];
+    
+    
+    //find closest neighbors
+    int i = 0;
+    int closestNeighbor1 = 0;
+    double closestDist1 = 1000;
+    double diffX1 = 0;
+    double diffY1 = 0;
+    
+    int closestNeighbor2 = 0;
+    double closestDist2 = 1000;
+    double diffX2 = 0;
+    double diffY2 = 0;
+    
+    for(i; i < this->imagesAndPoses.size(); ++i) {
+        double x = this->imagesAndPoses[i].pose(0,3);
+        double y = this->imagesAndPoses[i].pose(1,3);
+        
+        cout << "x: " << x << endl;
+        cout << "y: " << y << endl;
+        
+        double dist = sqrt(pow(virtual_X - x,2) + pow(virtual_Y - y,2));
+        
+        cout << "dist: " << dist << endl;
+        
+        if(dist < closestDist2) {
+            if(dist < closestDist1) {
+//                cout << "new closest" << endl;
+                closestDist2 = closestDist1;
+                diffX2 = diffX1;
+                diffY2 = diffY1;
+                closestNeighbor2 = closestNeighbor1;
+                
+                closestDist1 = dist;
+                closestNeighbor1 = i;
+                diffX1 = virtual_X - x;
+                diffY1 = virtual_Y - y;
+            }
+            else {
+//                cout << "new second closest" << endl;
+                closestDist2 = dist;
+                closestNeighbor2 = i;
+                diffX2 = virtual_X - x;
+                diffY2 = virtual_Y - y;
+            }
+        }
+    }
+    
+    cout << "closest neighbor 1: " << closestNeighbor1 << endl;
+    cout << "closest neighbor 2: " << closestNeighbor2 << endl;
+    
+    
+    Mat Img(IMAGE_RESOLUTION_HEIGHT, IMAGE_RESOLUTION_WIDTH, CV_8UC4);
+    bool outofrange1 = false;
+    bool outofrange2 = false;
+    //interpolate the patches
+    int patch_size = 5;
+    int u,v;
+    for(v = 0; (v+1) * patch_size < IMAGE_RESOLUTION_HEIGHT; ++v) {
+        for(u = 0; (u+1) * patch_size < IMAGE_RESOLUTION_WIDTH; ++u) {
+            //check if patch is inside the neighbors field of view
+            //set alpha (reset if outof range)
+            double alpha = closestDist1 / (closestDist1 + closestDist2);
+            
+            //closest neighbor:
+            if(u * patch_size +  diffX1 < 0 || (u+1) * patch_size + diffX1 >= IMAGE_RESOLUTION_WIDTH
+               || v * patch_size + diffY1 < 0 || (v+1) * patch_size + diffY1 >= IMAGE_RESOLUTION_HEIGHT) {
+                //outside range: make black
+                outofrange1 = true;
+                alpha = 0;
+            }
+            //second closest neighbor:
+            if(u * patch_size +  diffX2 < 0 || (u+1) * patch_size + diffX2 >= IMAGE_RESOLUTION_WIDTH
+               || v * patch_size + diffY2 < 0 || (v+1) * patch_size + diffY2 >= IMAGE_RESOLUTION_HEIGHT) {
+                if(outofrange1) {
+                    //set patch to be black
+                    Mat patch(patch_size, patch_size, CV_8UC4, Scalar(0,0,0,0));
+                    patch.copyTo(Img(Rect(u * patch_size,v * patch_size, patch_size, patch_size)));
+                    continue;
+                }
+                outofrange2 = true;
+                alpha = 1;
+            }
+            
+            Mat patch(patch_size, patch_size, CV_8UC4);
+            Mat patch1(patch_size, patch_size, CV_8UC4, Scalar(0,0,0));
+            Mat patch2(patch_size, patch_size, CV_8UC4, Scalar(0,0,0));
+//            
+//            cout << "before patch 1" << endl;
+
+            
+            if(!outofrange1){
+                patch1 = this->imagesAndPoses[closestNeighbor1].image(Rect(u * patch_size +  diffX1,
+                                                                           v * patch_size +  diffY1,
+                                                                           patch_size, patch_size));
+            }
+            
+//            
+//            cout << "(u+1) * patch_size +  diffX2: " << (u+1) * patch_size +  diffX2 << endl;
+//            cout << "(v+1) * patch_size +  diffY2: " << (v+1) * patch_size +  diffY2 << endl;
+//            cout << "image 2 width" << this->imagesAndPoses[closestNeighbor2].image.cols << endl;
+//            
+//            cout << "image 2 height" << this->imagesAndPoses[closestNeighbor2].image.rows << endl;
+//            cout << "WIDTH " << IMAGE_RESOLUTION_WIDTH << endl;
+//            cout << "Height " << IMAGE_RESOLUTION_HEIGHT << endl;
+//            
+//            
+//            cout << "before patch 2" << endl;
+            if(!outofrange2){
+                patch2 = this->imagesAndPoses[closestNeighbor2].image(Rect(u * patch_size +  diffX2,
+                                                                           v * patch_size +  diffY2,
+                                                                           patch_size, patch_size));
+            }
+//            cout << "before blend" << endl;
+            
+            patch = patch1 * alpha + patch2 * (1-alpha);
+            
+//            
+//            cout << "u * patchsize: " << u*patch_size << endl;
+//            cout << "v* patchsize: " << v*patch_size << endl;
+//            cout << "Img.rows " << Img.rows << endl;
+//            cout << "Img.cols " << Img.cols << endl;
+//            cout <<"Img chanels "<<Img.channels() << endl;
+//            cout <<"patch chanels "<<patch.channels() << endl;
+//            
+
+            
+//            cout << "before copy to" << endl;
+            
+            patch.copyTo(Img(Rect(u * patch_size, v * patch_size, patch_size, patch_size)));
+//            cout << "after copy to" << endl;
+            
+        }
+    }
+
+    this->currImage = Img;
+    
+    return SUCCESS;
+    
+}

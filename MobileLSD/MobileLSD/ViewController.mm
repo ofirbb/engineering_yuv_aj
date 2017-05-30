@@ -187,8 +187,6 @@ void getK(Sophus::Matrix3f& K){
 
 - (void) processImage:(cv:: Mat &)image
 {
-
-    
     
     if (count_ < skip_frame_){
         count_++;
@@ -215,30 +213,37 @@ void getK(Sophus::Matrix3f& K){
     auto transmat = sim3mat.translation();
     auto rotmat = sim3mat.rxso3().rotationMatrix();
     
-    lightfieldStructUnit newUnit;
+    system_->addNewDataMutex.lock();
+    if (lightfield_->numImages == lightfield_->maxNumImages) {
+        [self performSegueWithIdentifier:@"moveToRenderSegue" sender:self];
+        
+    }
     
-//    system_->addNewDataMutex.lock();
-//    if (lightfield_->numImages == lightfield_->maxNumImages) {
-//        [self performSegueWithIdentifier:@"moveToRenderSegue" sender:self];
-//        
-//    }
-//    
 //    unsigned char *input = (unsigned char *)(image.data);
 //    //int de = image.channels();
 //    std::memcpy(lightfield_->ImgDataSeq + 3 * image.cols * image.rows + lightfield_->numImages,
 //                input, 3 * image.cols * image.rows);
 //    
-//    Matx34d tempPose = Matx34d(rotmat(0, 0), rotmat(0, 1), rotmat(0, 2), transmat(0),
-//                               rotmat(1, 0), rotmat(1, 1), rotmat(1, 2), transmat(1),
-//                               rotmat(2, 0), rotmat(2, 1), rotmat(2, 2), transmat(2));
-//    
+    Matx34d tempPose = Matx34d(rotmat(0, 0), rotmat(0, 1), rotmat(0, 2), transmat(0),
+                               rotmat(1, 0), rotmat(1, 1), rotmat(1, 2), transmat(1),
+                               rotmat(2, 0), rotmat(2, 1), rotmat(2, 2), transmat(2));
+    
 //    lightfield_->AllCameraMat.push_back(tempPose);
 //    lightfield_->images.push_back(image);
-//    ++(lightfield_->numImages);
-//    
-//    lightfield_->currImage = image;
-//    lightfield_->currPose = tempPose;
-//    system_->addNewDataMutex.unlock();
+    
+    cout << "pose : " << tempPose << endl;
+    
+    lightfield_->currImage = image;
+    lightfield_->currPose = tempPose;
+    
+    lightfieldStructUnit newUnit;
+    newUnit.image = image;
+    newUnit.pose = tempPose;
+    
+    lightfield_->imagesAndPoses.push_back(newUnit);
+    ++(lightfield_->numImages);
+    
+    system_->addNewDataMutex.unlock();
     runningIdx_++;
     
     //Finally estimate the frames per second (FPS)
