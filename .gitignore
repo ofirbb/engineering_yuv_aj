@@ -34,3 +34,4 @@ node_modules
 .idea
 
 MobileLSD/opencv2.framework
+third_party/*
