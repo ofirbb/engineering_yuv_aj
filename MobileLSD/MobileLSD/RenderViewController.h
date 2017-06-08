@@ -6,15 +6,15 @@
 //  Copyright © 2017 Guanhang Wu. All rights reserved.
 //
 
-#include "LightfieldClass.h"
 #import <UIKit/UIKit.h>
 
+#import "LightfieldClass.h"
 
 @interface RenderViewController : UIViewController
 
 @property (nonatomic) LightfieldClass *lightfield_;
 
-@property (nonatomic, retain) IBOutlet UIImageView* renderedImageView;
+@property (nonatomic, retain) IBOutlet UIImageView *renderedImageView;
 
 @property (weak, nonatomic) IBOutlet UIView *testView;
 

@@ -1,28 +1,18 @@
-//
-//  RenderViewController.m
-//  MobileLSD
-//
-//  Created by AJ Bruce on 4/12/17.
-//  Copyright © 2017 Guanhang Wu. All rights reserved.
-//
+// All rights reserved.
+
+// Must be included before all others, otherwise does not link well.
+#import <opencv2/opencv.hpp>
+
+#import "RenderViewController.h"
 
 #import <Foundation/Foundation.h>
+#import <iostream>
+#import <boost/thread.hpp>
+#import "util/settings.h"
+#import "util/globalFuncs.h"
+
 #import "ViewController.h"
-#import "RenderViewController.h"
-#include <boost/thread.hpp>
-#include "util/settings.h"
-#include "util/globalFuncs.h"
-#include "opencv2/opencv.hpp"
-#include <iostream>
-#include "SlamSystem.h"
-#include "LightfieldClass.h"
-
-#include <iostream>
-
-#include "SlamSystem.h"
-#include "LightfieldClass.h"
-
-
+#import "SlamSystem.h"
 
 @interface RenderViewController () {
     //xform xf;

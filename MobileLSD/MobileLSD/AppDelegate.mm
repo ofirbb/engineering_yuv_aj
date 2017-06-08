@@ -1,10 +1,4 @@
-//
-//  AppDelegate.m
-//  MobileLSD
-//
-//  Created by Guanhang Wu on 11/24/16.
-//  Copyright © 2016 Guanhang Wu. All rights reserved.
-//
+// All rights reserved.
 
 #import "AppDelegate.h"
 

@@ -1,23 +1,17 @@
-//
-//  ViewController.m
-//  MobileLSD
-//
-//  Created by Guanhang Wu on 11/24/16.
-//  Copyright © 2016 Guanhang Wu. All rights reserved.
-//
+// All rights reserved.
+
+#import <opencv2/opencv.hpp>
+
 #import "ViewController.h"
+
+#import <boost/thread.hpp>
+#import "util/settings.h"
+#import "util/globalFuncs.h"
+#import <iostream>
+
+#import "SlamSystem.h"
+#import "LightfieldClass.h"
 #import "RenderViewController.h"
-
-#include <boost/thread.hpp>
-#include "util/settings.h"
-#include "util/globalFuncs.h"
-#include "opencv2/opencv.hpp"
-#include <iostream>
-#include "SlamSystem.h"
-
-#include "SlamSystem.h"
-#include "LightfieldClass.h"
-
 
 @interface ViewController (){
     UIImageView *imageView_; // Setup the image view

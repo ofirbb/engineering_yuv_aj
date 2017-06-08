@@ -24,12 +24,7 @@
 #include <iostream>
 #include <stdlib.h>
 
-//#include <GLFW/glfw3.h>
-//#include <glut.h>
-//#include "XForm.h"
 #include "ReadInDataSet.h"
-//#include "ViewController.h"
-
 
 using namespace std;
 using namespace cv;
@@ -57,48 +52,44 @@ struct lightfieldStructUnit {
 class LightfieldClass {
 
 public:
-	int maxNumImages;
-    int numImages;
-	vector<lightfieldStructUnit> imagesAndPoses;
-    Vec3d currentTranslation;
-	
-    Mat currImage;
-    vector<Mat> images;
-    Matx34d currPose;
-	unsigned char*ImgDataSeq;
-	vector<pair<int, double>> CurrFrameWeights;
-	vector<Point3d> proxyData;
-	vector <Matx34d> AllCameraMat;
-    
-    String fullPathData;
+  int maxNumImages;
+  int numImages;
+  vector<lightfieldStructUnit> imagesAndPoses;
+  Vec3d currentTranslation;
 
-	Mat Camera_K; // Camera Intrinsic Matrix
-	Mat discoeff;
+  Mat currImage;
+  vector<Mat> images;
+  Matx34d currPose;
+  unsigned char*ImgDataSeq;
+  vector<pair<int, double>> CurrFrameWeights;
+  vector<Point3d> proxyData;
+  vector <Matx34d> AllCameraMat;
 
-	LightfieldClass(void);
-	
-    ~LightfieldClass(void);
-	
-	vector<pair<int, double>> GetWeights(Point3d proxyPoint, Point3d VirtualCameraLoc, vector<Point3d> AllCameraLocsP);
-	vector<Matx33d> CalculateFundamentalMat(vector<Matx34d> allcameraMat, Matx34d curP);
-	int kth;
-	Mat RenderImage(vector<Point3d> proxyPoint, Point3d VirtualCameraLoc, vector<Point3d> AllCameraLocs, Matx33d VirtualRot, Vec3d VirtualTrans);
-//	Mat DrawImage(xform xf);
-    int DrawImage(Point3d vCameraLoc, Matx33d vP_rot, Vec3d vP_trans);
-	Mat InterpolateRenderImage(Mat Img, vector<Vec2d> proxy2DPoint);
-	int proxyWidth;
-	int proxyHeight;
+  String fullPathData;
 
-	//int calculateHomography(Mat& img_object, Mat& img_scene, Mat & H);
-	//int getTheData(void);
-	//int makeTheFrame(void);
-	//int poseFromHomography(const Mat& H, Mat& pose);
+  Mat Camera_K; // Camera Intrinsic Matrix
+  Mat discoeff;
 
-	int findImageFromPose(void);
-    
-    
+  LightfieldClass(void);
 
+  ~LightfieldClass(void);
 
+  vector<pair<int, double>> GetWeights(Point3d proxyPoint, Point3d VirtualCameraLoc, vector<Point3d> AllCameraLocsP);
+  vector<Matx33d> CalculateFundamentalMat(vector<Matx34d> allcameraMat, Matx34d curP);
+  int kth;
+  Mat RenderImage(vector<Point3d> proxyPoint, Point3d VirtualCameraLoc, vector<Point3d> AllCameraLocs, Matx33d VirtualRot, Vec3d VirtualTrans);
+  //	Mat DrawImage(xform xf);
+  int DrawImage(Point3d vCameraLoc, Matx33d vP_rot, Vec3d vP_trans);
+  Mat InterpolateRenderImage(Mat Img, vector<Vec2d> proxy2DPoint);
+  int proxyWidth;
+  int proxyHeight;
+
+  //int calculateHomography(Mat& img_object, Mat& img_scene, Mat & H);
+  //int getTheData(void);
+  //int makeTheFrame(void);
+  //int poseFromHomography(const Mat& H, Mat& pose);
+
+  int findImageFromPose(void);
 };
 
 
