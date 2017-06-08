@@ -20,6 +20,7 @@
     //UITextView *fpsView_; // Display the current FPS
     //UITextView *avgfpsView_; // Display the current FPS
     //UITextView *translation_; // Display the current FPS
+    int64 start_time_; // Store the current time
     int64 curr_time_; // Store the current time
     lsd_slam::SlamSystem* system_;
     //AJB-added
@@ -35,7 +36,9 @@
     //cv::Mat colorImage;
     UIButton *resetButton_;
     UIButton *renderButton_;
-    int skip_frame_; //buffer size for the camera to start
+  dispatch_queue_t _processingQueue;
+  dispatch_semaphore_t _processingLimiter;
+  NSDate *processStart_;
 }
 @end
 
@@ -118,11 +121,23 @@ void getK(Sophus::Matrix3f& K){
     curr_time_ = cv::getTickCount();
     //max_fps_ = 0;
     //avg_fps_ = 0;
-    skip_frame_ = 20;
+
+  _processingQueue = dispatch_queue_create("SLAM.processing", DISPATCH_QUEUE_SERIAL);
+  _processingLimiter = dispatch_semaphore_create(1);
+
+  processStart_ = [NSDate date];
+
     [videoCamera start];
     
 }
 
+// lock the semaphore when a frame goes into SLAM processing
+- (BOOL)waitForSemaphore {
+  // Semaphore waiting time is not immediate to allow for its release by frames currently processed.
+  long status = dispatch_semaphore_wait(_processingLimiter,
+                                        dispatch_time(DISPATCH_TIME_NOW, 100 * NSEC_PER_MSEC));
+  return status == 0;
+}
 
 - (void)restartWasPressed {
     [videoCamera stop];
@@ -179,22 +194,23 @@ void getK(Sophus::Matrix3f& K){
     }
 
 
-- (void) processImage:(cv:: Mat &)image
-{
-    
-    if (count_ < skip_frame_){
-        count_++;
-        return;
-    }
-    
-    
+- (void) processImage:(cv::Mat &)image {
+  if(![self waitForSemaphore]) {
+    return;
+  }
+
+  __block cv::Mat imageCopy = image.clone();
+  dispatch_async(_processingQueue, ^{
+
+    double timeStamp = -[processStart_ timeIntervalSinceNow];
+
     if(runningIdx_ == 0 || !system_->trackingIsGood){
         if (runningIdx_ != 0) system_->reinit();
-        system_->randomInit(image.data, curr_time_, runningIdx_);
+        system_->randomInit(imageCopy.data, timeStamp, runningIdx_);
     }
     else{
         std::cout<<"tracking"<<std::endl;
-        system_->trackFrame(image.data, runningIdx_,true,curr_time_);
+        system_->trackFrame(imageCopy.data, runningIdx_, true, timeStamp);
     }
     
     //display arrow
@@ -208,11 +224,7 @@ void getK(Sophus::Matrix3f& K){
     auto rotmat = sim3mat.rxso3().rotationMatrix();
     
     system_->addNewDataMutex.lock();
-    if (lightfield_->numImages == lightfield_->maxNumImages) {
-        [self performSegueWithIdentifier:@"moveToRenderSegue" sender:self];
-        
-    }
-    
+
 //    unsigned char *input = (unsigned char *)(image.data);
 //    //int de = image.channels();
 //    std::memcpy(lightfield_->ImgDataSeq + 3 * image.cols * image.rows + lightfield_->numImages,
@@ -227,25 +239,32 @@ void getK(Sophus::Matrix3f& K){
     
     cout << "pose : " << tempPose << endl;
     
-    lightfield_->currImage = image;
+    lightfield_->currImage = imageCopy;
     lightfield_->currPose = tempPose;
     
     lightfieldStructUnit newUnit;
-    newUnit.image = image;
+    newUnit.image = imageCopy;
     newUnit.pose = tempPose;
     
     lightfield_->imagesAndPoses.push_back(newUnit);
     ++(lightfield_->numImages);
-    
+    if (lightfield_->numImages == lightfield_->maxNumImages) {
+      [videoCamera stop];
+      [self performSegueWithIdentifier:@"moveToRenderSegue" sender:self];
+    }
+
     system_->addNewDataMutex.unlock();
     runningIdx_++;
-    
+
     //Finally estimate the frames per second (FPS)
-    int64 next_time = cv::getTickCount(); // Get the next time stamp
-    curr_time_ = next_time; // Update the time
-    
+//    int64 next_time = cv::getTickCount(); // Get the next time stamp
+//    curr_time_ = next_time; // Update the time
+
+    // release the semaphore when a frame finished SLAM processing
+    dispatch_semaphore_signal(_processingLimiter);
+  });
 }
-    
+
 -(void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender{
     if([segue.identifier isEqualToString:@"moveToRenderSegue"]){
         RenderViewController *controller = [segue destinationViewController];
