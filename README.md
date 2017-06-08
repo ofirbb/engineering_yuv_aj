@@ -3,11 +3,14 @@ This repository contains code from https://github.com/tum-vision/lsd_slam which 
 
 LSD-SLAM: Large-Scale Direct Monocular SLAM, J. Engel, T. Schöps, D. Cremers, ECCV '14
 
-#### Pre-requisites: xcode 8.0, opencv, boost, sophus, Eigen
+#### Pre-requisites: xcode 8.0, opencv 3.2.0 framework for iOS, boost, sophus, Eigen
 Please make sure xcode >= 8.0 is install in your computer.
 
-Please follow the link below to install opencv ios:
-http://docs.opencv.org/2.4/doc/tutorials/introduction/ios_install/ios_install.html
+openCV 3.2.0 framework should be downloaded from openCV website:
+https://sourceforge.net/projects/opencvlibrary/files/opencv-ios/3.2.0/opencv-3.2.0-ios-framework.zip/download
+
+The file should be located in the repository main folder in the following path:
+third_party/3.2.0/opencv2.framework
 
 boost, sophus and Eigen are included in this repository.
 
